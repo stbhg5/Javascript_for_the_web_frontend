@@ -7,7 +7,7 @@ console.log(color); // skyblue
 color = "yellow";
 console.log(color); // yellow
 
-// 긴 변수명 표기법법
+// 긴 변수명 표기법
 let iscatordog;
 let isCatOrDog; // 카멜 표기법
 
