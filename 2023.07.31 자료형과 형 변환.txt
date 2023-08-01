@@ -1,0 +1,118 @@
+[2023.07.31 자료형과 형 변환]
+
+1. 자료형
+- 원시 타입 : 숫자형, BigInt형, 문자형, Boolean형, Null, Undefined, Symbol형
+- 비 원시 타입 : 객체형(객체, 함수, 배열)
+
+// 자료형
+let number = 123;
+number = "123"; // 원시 타입 : 하나의 고정된 값
+
+let array = [1, "2", 3]; //비원시 타입 : 한 번에 여러 개의 값
+
+
+2. 숫자형
+숫자형(Number 타입)은 정수, 소수 등의 모든 숫자를 나타내며, 사칙연산 가능.
+
+// 숫자형
+let number2 = 25;
+console.log(number2 + 5); //30
+console.log(number2 - 5); //20
+console.log(number2 * 5); //125
+console.log(number2 / 5); //5
+
+Infinity, NaN 과 같은 특수한 숫자 값들이 포함되어있다.
+Infinity는 무한대를 나타내는 값으로, 하나의 값으로 변수에 할당하는 것도 가능하고, 어느 숫자든지 0으로 나누게 될 경우 반환되는 값.
+NaN은 Not A Number 즉, 숫자가 아니다 라는 뜻으로, 부정확한 연산을 하게 될 경우 반환되는 값.
+
+// 정수, 소수, 특수한 숫자
+let number3 = 25;
+number3 = 10.00123;
+number3 = Infinity; // 무한대
+number3 = NaN; // Not A Number : 부정확한 연산시 반환
+
+let number4 = 10;
+console.log(number4 / 0); // Infinity
+
+let number5 = 10;
+console.log("자바스크립트" / number5); // NaN
+
+자바스크립트는 이렇게 다른 언어들과는 다르게 부정확한 연산을 하거나, 0으로 나누는 연산을 하더라도 에러가 발생하지 않고 Infinity와 NaN이라는 값을 반환하기 때문에, 자바스크립트의 숫자 연산은 안전 하다고 할 수 있다.
+
+
+3. BigInt
+숫자형으로는 표현하지 못하는 범위인 (2^53 - 1) 보다 크거나 -(2^53 - 1) 보다 작은 정수를 나타내야 할 때 사용하는 자료형.
+
+// BigInt형
+let big1 = 9007199254740991n;
+let big2 = BigInt("9007199254740991");
+
+let big3 = 10n;
+let big4 = 5n;
+console.log(big3 + big4); // 15
+
+길이에 상관없이 정수를 나타낼 수 있고, big1 의 값과 같이 끝에 'n'을 붙이거나 big2의 값 처럼 함수 BigInt()를 호출에 생성 가능.
+사칙연산도 가능하나, BigInt 형의 값으로만 연산이 가능하고 일반 숫자형과는 연산할 수 없다.
+
+
+4. 문자형
+자바스크립트 변수에 문자열을 할당하기 위해서는 문자열을 따옴표로 묶어야 함.
+
+// 문자형
+let name1 = "hyobin"; //큰따옴표
+let name2 = "hyobin"; //작은따옴표
+let name3 = `hyobin`; //역따옴표(백틱)
+
+let name = "hyobin";
+let intro = `제 이름은 ${name} 입니다.`; // ${} : 템플릿 리터럴
+console.log(intro); // 제 이름은 hyobin 입니다.
+
+역따옴표(백틱) 은 이 두 가지의 따옴표와는 큰 차이점이 있는데, 문자열 안에 특정 변수에 저장된 값을 넣을 수 있다.
+역따옴표로 문자열을 묶은 후 ${}안에 특정 값을 넣어주면 된다. 이러한 방식을 템플릿 리터럴이라고 부른다.
+
+
+5. Boolean형
+값이 true, false 로 이루어진 자료형.
+
+// Boolean형
+let isClicked = false; //버튼이 클릭되었는지 안되었는지
+let isOpen = true; // modal이 열렸는지 안열렸는지
+
+if (isClicked) {
+  console.log("클릭O");
+} else {
+  console.log("클릭X");
+}
+
+참인지 거짓인지 분별하는 값을 저장할 때 사용되고, if-else라는 조건문을 이용해 변수의 값이 참인지 거짓인지에 따라 조건문으로 다른 코드를 실행해야 할 때 자주 사용되는 자료형.
+
+
+6. Null, Undefined
+null 은 오직 null 값만 포함는 자료형. null 값은 존재하지 않거나, 알 수 없는 값을 나타낼 때 사용.
+
+// Null, Undefined
+// let names = null;
+let names;
+console.log(name); //null??? -> undefined
+
+undefined도 null 값과 마찬가지로, undefined 값만을 포함하는 자료형.
+null 형과 다른점은, undefined은 값이 존재하지 않거나 알 수 없는 값일 때가 아니라, 변수에 값이 할당되지 않은 상태 일 때 자동으로 undefined라는 값이 할당 된다.
+
+
+7. 형 변환
+형 변환 : 자료형들을 자동으로 알맞게 변환
+묵시적 형변환 : 의도해서가 아닌 자동으로 자료형을 변환해주는 것.
+명시적 형변환 : 내장함수 등을 이용하여 값을 유지하며 자료형을 의도적으로 변환시키는 것.
+
+// 형 변환
+let num1 = "15";
+let num2 = 5;
+
+console.log(num1 / num2); // 3 - 묵시적 형 변환
+console.log(num1 + num2); // 155
+console.log(parseInt(num1) + num2); // 20 - 명시적 형 변환
+
+자바스크립트는 사칙연산 중 곱하기와 나누기, 빼기를 수행 할 때는, 문자열을 숫자로 형 변환을 하지만, 더하기 연산을 할 경우에는 숫자를 문자열로 변환한다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
