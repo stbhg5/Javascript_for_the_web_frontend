@@ -1,0 +1,119 @@
+[2023.08.02 조건문]
+
+조건문은 특정 조건이 성립되었을 때 그 조건에 해당하는 코드를 실행하게 하는 문법
+
+
+1. if문
+if문 옆에 작성하는 괄호 안에 특정 조건문을 넣어 해당 조건문이 성립하면 if문안의 코드를 실행하는 조건문. 영어 if 의 뜻과 같이 만약 ~ 하면 ~해라 라는 뜻.
+
+// 조건문
+// if문
+let num1 = 10;
+if (num1 === 10) {
+  //조건
+  console.log("num1의 값은 10 입니다."); //실행 코드
+}
+
+let num2 = 5;
+if (num2 === 10) {
+  //조건
+  console.log("num2의 값은 10 입니다."); //실행 코드
+}
+
+if문 안에 있는 조건에 맞지 않으면 코드가 실행되지 않고 아무것도 출력이 되지 않음.
+if문은 특정 조건이 만족 될 때만 코드를 실행 시키는 조건문.
+
+
+2. if-else문
+if-else 문은 if 문에서 else문을 추가한 것. 만약 ~ 하면 ~하고, 그렇지 않다면 ~해라 라는 뜻.
+
+// if-else문
+let num3 = 5;
+if (num3 === 10) {
+  console.log(`num3값은 10입니다.`);
+} else {
+  console.log(`num3값은 ${num3}입니다.`); // 백틱을 이용해 문자열 묶음, 템플릿 리터럴
+}
+
+else문은, if문에 있는 조건이 성립되지 않았을 경우에, 또다른 코드를 실행시키기 위한 조건문. 즉, 특정 조건에 만족할 경우와 만족하지 않을 경우를 구분해, 서로 다른 코드를 실행해야 할 경우 사용하는 조건문.
+
+
+3. if-else if문
+여러 조건에 따라 서로 다른 코드를 실행해야 할 경우 사용.
+
+// if-else if문
+let num4 = 5;
+if (num4 === 10) {
+  console.log("num4값은 10입니다.");
+} else if (num4 < 10) {
+  console.log("num4값은 10보다 작습니다.");
+} else {
+  console.log("num4값은 10보다 큽니다.");
+}
+
+
+4. switch/case문
+switch문 옆에 작성된 괄호안의 변수 값과 case문 옆에 작성된 값이 일치하는 코드블록을 찾은다음 해당 case문 블록 안에 작성된 코드를 실행.
+
+// switch/case문
+let fruit = "apple";
+switch (fruit) {
+  case "banana":
+    console.log("바나나");
+    break;
+  case "orange":
+    console.log("오렌지");
+    break;
+  case "apple":
+    console.log("사과");
+    break;
+  case "grape":
+    console.log("포도");
+    break;
+  default:
+    console.log("다른 과일");
+}
+
+break; 를 작성하지 않으면 조건에 맞는 case문 이후의 모든 코드가 실행.
+그렇기 때문에 case문 에서 실행할 코드를 작성하고 맨 마지막에는 항상 break; 를 작성해주어야 함.
+
+// break; 작성하지 않음
+let fruit2 = "apple";
+switch (fruit2) {
+  case "banana":
+    console.log("바나나");
+  case "orange":
+    console.log("오렌지");
+  case "apple":
+    console.log("사과");
+  case "grape":
+    console.log("포도");
+  default:
+    console.log("다른 과일");
+}
+
+맨 아래의 default: 는 fruit 변수 값이 case 로 정해두지 않은 값일 경우 실행.
+
+// default 실행
+let fruit3 = "pineapple";
+switch (fruit3) {
+  case "banana":
+    console.log("바나나");
+    break;
+  case "orange":
+    console.log("오렌지");
+    break;
+  case "apple":
+    console.log("사과");
+    break;
+  case "grape":
+    console.log("포도");
+    break;
+  default:
+    console.log("다른 과일");
+}
+
+switch/case 문은 이와 같이 특정 값이 무엇인지에 따라 각각 다른 작업을 수행 할 수 있게 해주는 유용한 조건문.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
