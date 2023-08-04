@@ -13,4 +13,5 @@
     <a href="https://stbhg5.tistory.com/220">연산자</a><br/>
     <a href="https://stbhg5.tistory.com/222">조건문</a><br/>
     <a href="https://stbhg5.tistory.com/224">함수와 지역변수, 외부변수</a><br/>
+    <a href="https://stbhg5.tistory.com/226">스코프</a><br/>
     <br/>
