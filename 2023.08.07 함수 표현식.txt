@@ -1,0 +1,93 @@
+[2023.08.07 함수 표현식]
+
+
+1. 함수 표현식
+함수를 선언할 때 function 키워드 옆에 함수의 이름을 적는 방식을 함수 선언식 이라고 한다.
+
+// 함수 선언식
+function print() {
+  console.log("hello world");
+}
+
+자바스크립트에서는 함수를 선언할 때 이러한 함수 선언식 외에 함수 표현식을 이용해 함수를 만들 수 있다.
+
+// 함수 표현식
+let print = function () {
+  console.log("hello world");
+};
+
+코드를 보면 print 라는 변수에 "hello world"를 출력하는 함수를 마치 값처럼 할당했는데, print 는 변수이지만 함수를 값으로 가지고 있어 함수를 호출하는 것과 동일하게 "print();" 로 호출할 수 있다.
+
+
+2. 함수 선언식 vs 함수 표현식
+함수 선언식과 함수 표현식의 가장 큰 차이점은, 함수 선언식은 함수 호이스팅에 영향을 받지만 함수 표현식은 호이스팅에 영향을 받지 않는다.
+
+// 함수 선언식 vs 함수 표현식
+// 함수 선언식 호이스팅O
+print(); // hello world
+function print() {
+  console.log("hello world");
+}
+
+이번에는 함수 표현식을 이용해 print 함수를 만들고, 함수 선언 전에 함수를 호출하는 코드를 작성 한다.
+
+// 함수 표현식 호이스팅X
+print(); //print is not a function
+let print = function () {
+  console.log("hello world");
+};
+
+"print 는 함수가 아닙니다" 라는 ERROR 가 발생.
+함수 표현식은 함수 호이스팅의 대상에 해당되지 않기 때문에 함수 표현식으로 생성된 함수들을 호출할 경우에는 print 함수의 호출문을 항상 선언문의 아래쪽에 작성해야 한다.
+
+// 올바른 함수 표현식 작성
+let print = function () {
+  console.log("hello world");
+};
+print();
+
+
+3. 화살표형 함수
+화살표형 함수를 통해 더 간결하게 작성할 수 있다.
+
+// 화살표형 함수
+const print = () => {
+  console.log("hello world");
+};
+print(); // hello world
+
+화살표 함수는 function 이라는 키워드를 작성하지 않고 => 화살표 모양을 통해 변수에 함수를 값처럼 저장 한다.
+화살표 함수는 함수표현식 처럼 변수의 이름을 통해 함수를 호출할 수 있고, 화살표 함수 또한 호이스팅의 대상이 아니기 때문에 순서를 잘 지켜서 작성해 주어야 한다.
+
+
+4. 콜백함수
+콜백함수란, 다른 함수에 매개변수로 넘겨준 함수를 의미 한다.
+
+// 매개변수가 존재하는 함수
+function add(num1, num2) {
+  console.log(num1 + num2);
+}
+add(10, 15); //25
+
+작성된 코드의 함수는 매개변수로 두 개의 숫자를 받아 두 숫자를 더한 값을 출력하는 함수인데, 매개변수인 num1과 num2의 값이 함수라면 num1과 num2를 콜백함수라고 부를 수 있다.
+
+// 콜백함수
+function start(name, callback) {
+  console.log(`안녕하세요 ${name} 입니다.`);
+  callback(); // finish();
+}
+
+function finish() {
+  console.log("감사합니다.");
+}
+
+start("hyobin", finish);
+
+start 함수는 2개의 매개변수를 갖고 있고, 호출 시 한 줄의 문장을 출력하고, 매개변수를 통해 전달받은 callback 함수를 실행 한다.
+finish 함수는 매개변수를 받지 않고, 호출 시 "감사합니다" 라는 문장을 출력 한다.
+start 함수를 호출할 때 "hyobin" 이라는 문자열과 start 함수 호출문 위에 선언된 finish 함수를 매개변수로 전달하는데, finish 함수처럼 다른 함수의 인자로 전달된 함수를 콜백 함수라고 부른다.
+
+콜백함수는 이렇게 특정 함수를 값처럼 함수의 매개변수로 전달해 유연하고 다양한 동작을 할 수 있게 해준다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
