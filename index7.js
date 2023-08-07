@@ -21,7 +21,7 @@ let print = function () {
   console.log("hello world");
 };
 
-// 올바른 함수 표현식 작성성
+// 올바른 함수 표현식 작성
 let print = function () {
   console.log("hello world");
 };
