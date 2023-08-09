@@ -17,4 +17,5 @@
     <a href="https://stbhg5.tistory.com/227">호이스팅</a><br/>
     <a href="https://stbhg5.tistory.com/229">함수 표현식</a><br/>
     <a href="https://stbhg5.tistory.com/230">객체</a><br/>
+    <a href="https://stbhg5.tistory.com/232">배열</a><br/>
     <br/>
