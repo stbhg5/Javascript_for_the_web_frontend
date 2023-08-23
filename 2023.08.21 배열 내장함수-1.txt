@@ -1,0 +1,192 @@
+[2023.08.21 배열 내장함수-1]
+
+배열은 굉장히 많은 내장 함수(메서드)를 가지고 있다. 이 내장함수들을 잘 다룰 수 있게 되면 유연하고 깔끔한 프로그래밍을 할 수 있다. 자바스크립트 배열의 내장 함수들 중, 자주 사용되는 내장 함수들을 몇 가지 살펴본다.
+
+
+1. forEach
+배열의 모든 요소들에 접근하기 위해 for문을 사용했었다.
+
+// for문
+let arr = [1, 2, 3, 4, 5];
+for (let i = 0; i < arr.length; i++) {
+  console.log(arr[i]);
+}
+
+배열의 요소들에 접근하기 위해서는 for문을 사용할 수도 있지만, 자바스크립트에서는 배열의 내장함수를 이용해 더 간단하게 배열 요소에 접근할 수 있다.
+
+// forEach 메서드
+let arr = [1, 2, 3, 4, 5];
+arr.forEach((elm) => {
+  console.log(elm);
+});
+
+콜백함수에는 3가지의 매개변수를 전달 할 수 있는데, 먼저 current value 즉, 처리할 현재 요소를 매개변수로 넣어주면, 배열 arr 의 요소들이 순서대로 출력된다. 이렇게 forEach 메서드를 사용하면, 훨씬 단순하게 코드를 작성할 수 있다.
+콜백함수의 매개변수로 전달 할 수 있는 또 다른 값인, 실제 배열 요소의 순서를 나타내는 index 를 전달해본다.
+
+// forEach 메서드 index 매개변수
+let arr = [1, 2, 3, 4, 5];
+arr.forEach((elm, idx) => {
+  console.log(`${idx} 번째 요소는 ${elm} 입니다.`);
+});
+
+index 매개변수는 선택적 매개변수로, 첫 번째 매개변수의 옆에 두 번째 매개변수로 작성해주어야 한다. 콜백함수의 두 번째 매개변수는 배열 요소의 index를 출력할 수 있는 매개변수 이다.
+마지막으로 이 콜백함수에 넘겨줄 수 있는 매개변수는 array 이다.
+
+// forEach 메서드 array 매개변수
+let arr = [1, 2, 3, 4, 5];
+arr.forEach((elm, idx, array) => {
+  console.log(`${idx} 번째 요소는 ${elm} 입니다.`);
+  console.log(array);
+});
+
+array 매개변수는 콜백함수의 세 번째 매개변수로 작성되며 출력결과 실제 arr 배열 그 자체가 출력되는 것을 확인할 수 있다.
+forEach 내장함수는 배열에서 for문을 대체해 사용되고, 콜백함수의 여러가지 매개변수들을 통해 더 다양한 기능을 할 수 있는 유용한 배열 메서드이다.
+
+
+2. map
+newArray 이라는 새로운 빈 배열을 생성하고, for문을 통해 arr 배열의 모든 요소에 10을 곱한 값을 push 메서드로 newArray 배열에 넣어본다.
+
+// map 사용전
+let arr = [1, 2, 3, 4, 5];
+let newArray = [];
+for (let i = 0; i < arr.length; i++) {
+  newArray.push(arr[i] * 10);
+}
+console.log(newArray);
+
+newArray 변수를 출력하면 10, 20, 30, 40, 50 의 요소가 담긴 배열이 출력된다. 이러한 코드는 map 을 이용하면, 훨씬 짧은 코드로 구현할 수 있다.
+map 메서드도 forEach 메서드처럼 콜백함수를 전달받고, 배열 안의 모든 원소를 변환할 때 유용하게 사용되는 메서드이다.
+
+// map 활용
+let arr = [1, 2, 3, 4, 5];
+let newArray = arr.map((elm) => {
+  return elm * 10;
+});
+console.log(newArray);
+
+map 이라는 내장함수는 전달한 콜백함수를 호출한 결과를 모아서 새로운 배열로 반환해주는 내장함수, 배열의 모든요소에 연산을 적용하고, 그 결과를 새로운 배열로 돌려받을 수 있다.
+내장함수 map 의 콜백함수에는 forEach와 동일하게 3가지의 매개변수를 전달할 수 있는데, current value(처리할 현재 요소), index, array 순서로 매개변수를 전달해 각각의 값을 활용할 수도 있다.
+
+
+3. at
+배열에서 특정 인덱스에 해당하는 요소를 찾을 때에는 대괄호를 사용해 대괄호 안에 인덱스를 작성한 다음 요소의 값을 확인했었다.
+
+// at 사용전
+let colors = ["green", "blue", "purple"];
+console.log(colors[1]); //blue
+console.log(colors[colors.length - 1]); //purple
+
+하지만, 이 colors 배열에 매우 많은 값들이 들어있어 배열의 길이가 매우 길다면, 우리는 배열의 가장 마지막 값을 출력하기 위해 대괄호 안에 colors.length-1 이라는 값을 작성해 주어야 한다.
+at 이라는 배열 내장함수는 colors.length-1 이라는 값 대신에 쉽게 특정 배열의 마지막 요소에 접근할 수 있게 해줄 수 있는 내장함수 이다.
+
+// at 활용
+let colors = ["green", "blue", "purple"];
+console.log(colors.at(1)); //blue
+console.log(colors.at(-1)); //purple
+
+at이라는 내장함수는 대괄호 안에 인덱스를 작성하는 방법과 동일하게, 매개변수로 배열의 인덱스를 넘겨주면 그 매개변수에 해당하는 인덱스의 배열요소가 출력된다. 하지만 이 매개변수로 -1 이라는 값을 넘겨주면 항상 배열의 마지막 요소의 값을 반환하는 내장함수 이다.
+
+
+4. includes
+includes 메서드는 매개변수로 받은 요소를 배열이 포함하고 있는지 판별하여 boolean 값으로 반환한다.
+
+// includes
+let colors = ["green", "blue", "purple"];
+console.log(colors.includes("blue")); // true
+console.log(colors.includes("yellow")); // false
+
+includes 메서드는 매개변수로 또 다른 값을 전달할 수 있는데, 찾을 배열 요소의 값이 적힌 매개변수 옆에 배열의 인덱스를 작성할 수 있다.
+
+// includes 매개변수로 fromindex 전달
+let colors = ["green", "blue", "purple"];
+console.log(colors.includes("blue", 2)); // false
+console.log(colors.includes("blue", 1)); // true
+
+출력 결과 false 와 true 가 출력되는데, 이 매개변수는 fromIndex 다시말해, 이 colors 배열에서 특정 요소를 찾기 시작할 위치를 뜻한다.
+includes 메서드는 배열의 요소 중 특정값이 존재하는지를 쉽게 확인할 수 있는 메서드 이다.
+
+
+5. indexOf
+indexOf 메서드는 특정 값을 지닌 요소가 몇 번째에 위치하는 요소인지를 찾아주는 함수이다.
+
+// indexOf
+let colors = ["green", "blue", "purple"];
+console.log(colors.indexOf("purple")); // 2
+console.log(colors.indexOf("yellow")); // -1
+
+만약 colors 배열에 존재하지 않는 값을 indexOf 메서드를 통해 찾으려고 한다면 항상 -1 값을 반환한다.
+indexOf 메서드도 includes 메서드와 마찬가지로 두 번째 매개변수로 검색을 시작할 인덱스를 전달 할 수 있다.
+
+// indexOf 매개변수로 fromindex 전달
+let colors = ["green", "blue", "purple"];
+console.log(colors.indexOf("blue", 2)); // -1
+
+
+6. findIndex
+indexOf는 특정 요소가 배열의 몇 번째 index 인지를 찾아주는 함수지만, 배열 요소의 값이 객체형태거나 배열의 형태일 때의 인덱스를 찾아주지 못한다.
+배열 요소의 값이 객체 형태라면, findeIndex 함수를 사용한다.
+
+// findIndex
+let colors = [
+  { id: 1, color: "green" },
+  { id: 2, color: "blue" },
+  { id: 3, color: "purple" }
+];
+let idx = colors.findIndex((elm) => elm.color === "purple");
+console.log(idx); // 2
+colors.findIndex((elm, idx, array) =>
+  console.log(`${idx} 번째 값 - id: ${elm.id}, color: ${elm.color}`)
+);
+colors.findIndex((elm, idx, array) => console.log(array));
+
+findIndex 또한 콜백함수를 작성해주고, 콜백함수의 매개변수로 elm 이라는 current value 를 전달한다.
+화살표형 함수를 작성할 때에는 중괄호를 사용하고 return을 통해 함수를 반환하는 방법도 있지만, 간단하게 중괄호와 return문을 작성하지 않고 바로 코드를 작성해 값을 반환하는 방법도 있다.
+findIndex는 배열의 모든 요소에 대해 순차적으로 콜백함수를 수행하며, 조건을 가장 먼저 만족하는 배열의 요소의 인덱스를 반환한다. 또한 매개변수로 current value, index, array 를 전달할 수 있다.
+작성한 코드를 실행해보면 elm 에는 배열의 요소가, idx에는 배열 요소의 인덱스가, array에는 실제 colors 배열의 값이 담겨있는 것을 볼 수 있다.
+
+
+7. find
+find 함수는 찾아낸 값 그 자체를 반환하는 함수이다.
+
+// find
+let colors = [
+  { id: 1, color: "green" },
+  { id: 2, color: "blue" },
+  { id: 3, color: "purple" }
+];
+let idx = colors.find((elm) => elm.color === "purple");
+console.log(idx); // { id: 3, color: "purple" }
+
+find 메서드 또한 마찬가지로 콜백함수의 매개변수로 current value, index, array 를 전달할 수 있고, 이렇게 주어진 조건을 만족하는 첫 번째 배열 요소의 값을 반환하고, 만약 배열 요소에 해당 값이 없다면 undefined 라는 값을 반환하는 내장함수이다.
+
+
+8. filter
+filter 함수는 배열에서 특정 조건을 만족하는 값들만 따로 추출하여 새로운 배열을 생성하여 반환한다.
+
+// filter
+let colors = [
+  { id: 1, color: "green" },
+  { id: 2, color: "blue" },
+  { id: 3, color: "purple" }
+];
+let filterArray = colors.filter((elm, idx, array) => elm.id > 1);
+console.log(filterArray);
+
+filter 함수는 조건을 만족하는 가장 첫 번째 값만 반환하는 것이 아니라, 조건을 만족하는 모든 값들을 새로운 배열에 담아 반환하는 내장함수이다.
+
+
+9. slice
+slice는 특정 배열을 원하는 부분만 잘라서 가져올 수 있다. slice 메서드는 두 개의 매개변수로, begin과 end를 전달받는다. 전달받은 매개변수로 begin부터 end보다 1 작은 인덱스의 요소까지 배열을 복사하여 새로운 배열 객체로 반환한다.
+
+// slice
+let colors = [
+  { id: 1, color: "green" },
+  { id: 2, color: "blue" },
+  { id: 3, color: "purple" },
+  { id: 4, color: "yellow" }
+];
+let sliceArray = colors.slice(1, 3);
+console.log(sliceArray);
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C

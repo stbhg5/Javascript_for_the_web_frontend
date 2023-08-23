@@ -19,4 +19,5 @@
     <a href="https://stbhg5.tistory.com/230">객체</a><br/>
     <a href="https://stbhg5.tistory.com/232">배열</a><br/>
     <a href="https://stbhg5.tistory.com/234">반복문</a><br/>
+    <a href="https://stbhg5.tistory.com/237">배열 내장함수-1</a><br/>
     <br/>
