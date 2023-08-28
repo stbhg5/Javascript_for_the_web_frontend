@@ -1,0 +1,195 @@
+[2023.08.28 배열과 객체 구조분해할당]
+
+(섹션3 자바스크립트 응용하기)
+
+구조 분해 할당이란 배열이나 객체의 요소 및 프로퍼티들을 분해해서 그 값들을 각각의 변수에 할당하는 자바스크립트의 표현식이다.
+
+
+1. 배열의 구조 분해 할당
+colors 배열에 green, blue, purple 이라는 요소들을 담아준 뒤, 각각 c1, c2, c3 변수에 순서대로 할당해준다음 해당 변수들을 출력 한다.
+
+// 기본 변수 할당
+let colors = ["green", "blue", "purple"];
+let c1 = colors[0]; // "green"
+let c2 = colors[1]; // "blue"
+let c3 = colors[2]; // "purple"
+console.log(c1); // "green"
+console.log(c2); // "blue"
+console.log(c3); // "purple"
+
+이 작성한 코드를 구조분해를 사용해 간단하게 바꿔보도록 한다.
+배열의 구조 분해 할당은 colors 배열의 요소들을 분해한 다음 그 값들을 순서대로 각각의 새로운 변수에 할당할 수 있는 방법으로, 대괄호 안에 변수들을 선언하고 할당할 배열의 이름인 colors를 작성해 배열의 요소들을 할당 한다.
+
+// 구조 분해 할당
+let colors = ["green", "blue", "purple"];
+let [c1, c2, c3] = colors;
+console.log(c1); // "green"
+console.log(c2); // "blue"
+console.log(c3); // "purple"
+
+c1, c2, c3 변수를 한번에 선언하고, colors라는 배열을 별도로 선언하지 않고 이 변수들에 배열의 값을 바로 할당해본다.
+
+// 선언 분리 할당
+let c1, c2, c3;
+[c1, c2, c3] = ["green", "blue", "purple"];
+console.log(c1); // "green"
+console.log(c2); // "blue"
+console.log(c3); // "purple"
+
+변수의 선언을 분리해서 배열의 값을 할당하는 방법을 "선언 분리 할당" 이라고 부른다.
+
+이번에는 배열의 길이와 같은 수의 변수에 값을 할당하지 않고, 배열의 길이보다 적은 변수에 배열 요소를 할당해본다.
+
+// 배열의 길이보다 적은 변수에 배열 요소를 할당
+let c1, c2;
+[c1, c2] = ["green", "blue", "purple"];
+console.log(c1); // "green"
+console.log(c2); // "blue"
+
+각 변수들에 배열 요소의 순서대로 green과 blue의 값이 할당되었다.
+
+이번에는 배열의 길이보다 더 많은 수의 변수에 값을 할당해본다.
+
+// 배열의 길이보다 더 많은 수의 변수에 값을 할당
+let c1, c2, c3, c4;
+[c1, c2, c3, c4] = ["green", "blue", "purple"];
+console.log(c1); // "green"
+console.log(c2); // "blue"
+console.log(c3); // "purple"
+console.log(c4); // undefined
+
+배열의 길이보다 더 많은 수의 변수에 배열 요소의 값을 할당하려 한다면, 배열 요소들이 각각의 변수에 할당 된 이후에 남은 변수들에는 undefined 가 할당되게 된다.
+
+만약 남은 변수들에 undefined라는 값이 할당되는 것을 원하지 않는다면, 해당 변수에 기본값을 지정해 줄 수 있다.
+
+// 기본값 설정
+let c1, c2, c3, c4;
+[c1, c2, c3, c4 = "yellow"] = ["green", "blue", "purple"];
+console.log(c1); // "green"
+console.log(c2); // "blue"
+console.log(c3); // "purple"
+console.log(c4); // "yellow"
+
+이렇게 배열의 길이보다 큰 변수들에 배열 요소들을 할당하려해서, 값을 할당 받지 못하는 변수가 있을 때 원하는 값을 남은 변수들에 할당해주는 것을 "기본값 할당" 이라고 부른다.
+
+배열의 구조분해는 이렇게 배열 요소의 값을 추출할 때 자주 사용하지만, 두 개의 변수 값을 서로 바꿀 때 사용되기도 한다.
+먼저 구조분해를 사용하지 않고, 두 변수의 값을 서로 바꾸는 코드를 작성한다.
+
+// 변수 값 교환하기
+let a = 10;
+let b = 5;
+let tmp;
+console.log(a, b);
+tmp = a;
+a = b;
+b = tmp;
+console.log(a, b);
+
+이렇게 두 변수의 값을 변경하기 위해서는 tmp 와 같은 임시 변수가 필요하지만, 구조분해를 이용하면 임시 변수 없이 두 변수의 값을 교환할 수 있다.
+왼쪽에는 값을 할당 할 변수를, 오른쪽에는 교환할 값의 변수를 작성한다.
+
+// 구조분해를 이용한 변수 값 교환하기
+let a = 10;
+let b = 5;
+[a, b] = [b, a];
+console.log(a); // 5
+console.log(b); // 10
+
+이렇게 배열의 구조분해를 사용하면 코드를 훨씬 쉽고 단순하게 사용할 수 있다.
+
+
+2. 객체의 구조 분해 할당
+colors 라는 객체에 key값은 c1, c2, c3 이고 value값은 green, blue, purple 인 프로퍼티들을 넣어준 뒤, c1, c2, c3 라는 변수에 각각의 값을 할당한다.
+
+// 객체의 기본 할당
+let colors = {
+  c1: "green",
+  c2: "blue",
+  c3: "purple"
+};
+let c1 = colors.c1;
+let c2 = colors.c2;
+let c3 = colors.c3;
+console.log(c1); // green
+console.log(c2); // blue
+console.log(c3); // purple
+
+이번에는 구조 분해 할당을 사용해 코드를 더욱 간단하게 바꿔본다. 객체의 구조 분해 할당은 대괄호가 아닌, 중괄호를 사용한다. 중괄호안에 변수들을 작성하고, 오른쪽에는 분해 할 객체의 이름을 작성해준다.
+
+// 객체의 구조 분해 할당
+let colors = {
+  c1: "green",
+  c2: "blue",
+  c3: "purple"
+};
+let { c1, c2, c3 } = colors;
+console.log(c1); // green
+console.log(c2); // blue
+console.log(c3); // purple
+
+객체의 구조 분해 할당은 key값을 기준으로 객체를 분해해 변수에 할당한다.
+
+이번에는 이 c1, c2, c3이라는 key값을 변수의 이름으로 사용하지 않고, 다른 이름을 갖는 변수에 값을 할당해본다.
+먼저 구조분해를 사용하지 않고, 객체 프로퍼티의 값을 새로운 color1, color2, color3 라는 변수에 할당해본다.
+
+// 구조분해를 사용하지 않고, 객체 프로퍼티의 값을 새로운 color1, color2, color3 라는 변수에 할당
+let colors = {
+  c1: "green",
+  c2: "blue",
+  c3: "purple"
+};
+let color1 = colors.c1;
+let color2 = colors.c2;
+let color3 = colors.c3;
+console.log(color1); // green
+console.log(color2); // blue
+console.log(color3); // purple
+
+이제 이 코드를 객체의 구조 분해 할당을 사용한 코드로 변경해본다.
+객체 프로퍼티의 값을 할당할 변수가 객체 프로퍼티의 key값과 다를 경우에는 :(클론)을 이용해, 다른 이름의 변수에 값을 할당할 수 있다.
+
+// 객체의 구조 분해 할당을 사용한 코드로 변경
+let colors = {
+  c1: "green",
+  c2: "blue",
+  c3: "purple"
+};
+let { c1: color1, c2: color2, c3: color3 } = colors;
+console.log(color1); // green
+console.log(color2); // blue
+console.log(color3); // purple
+
+객체 프로퍼티의 key값의 오른쪽에 클론을 작성하고, 다른 이름의 변수를 작성해준다.
+
+객체의 구조 분해 할당 또한 변수의 수가 객체 프로퍼티의 수보다 클 경우, undefined가 할당되는 변수에 기본값을 설정할 수 있다.
+
+// 객체의 프로퍼티 수보다 더 많은 수의 변수에 값을 할당
+let colors = {
+  c1: "green",
+  c2: "blue",
+  c3: "purple"
+};
+let { c1, c2, c3, c4 } = colors;
+console.log(c1); // green
+console.log(c2); // blue
+console.log(c3); // purple
+console.log(c4); // undefined
+
+이렇게 colors 객체의 값이 c4라는 변수에 할당되지 않아, undefined라는 값이 할당되었을 때, 변수 c4에 기본값을 할당하고 싶다면,
+
+// 객체의 기본값 설정
+let colors = {
+  c1: "green",
+  c2: "blue",
+  c3: "purple"
+};
+let { c1, c2, c3, c4 = "yellow" } = colors;
+console.log(c1); // green
+console.log(c2); // blue
+console.log(c3); // purple
+console.log(c4); // yellow
+
+c4 yellow 이라는 기본값을 지정해주면 undefined 이 아닌 yellow가 출력되는 것을 확인할 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
