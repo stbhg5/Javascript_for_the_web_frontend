@@ -1,0 +1,138 @@
+[2023.08.23 배열 내장 함수-2]
+
+1. concat
+concat 메서드를 사용하면 두 개의 배열을 하나로 합쳐 새로운 배열로 반환할 수 있다.
+
+// concat
+let array1 = ["green", "blue"];
+let array2 = ["purple", "yellow"];
+console.log(array1.concat(array2));
+
+
+2. join
+join 메서드는 하나의 배열에서 배열 요소들의 값들을 문자열로 이어주는 메서드이다.
+
+// join
+let colors = ["green", "blue", "purple"];
+console.log(colors.join());
+console.log(colors.join(" "));
+
+join 메서드 내부에 들어가는 매개변수는 구분자로, 요소들을 합칠 때 사이에 어떤 문자를 넣을 것인지 결정할 수 있다.
+join 메서드에 아무런 매개변수를 넣어주지 않으면 쉼표가 기본적으로 구분자로 출력되게 된다.
+
+
+3. sort
+sort 메서드를 사용하면 기본적으로 오름차순 방식으로 배열이 정렬 된다.
+
+// sort
+let colors = ["green", "blue", "purple"];
+colors.sort();
+console.log(colors);
+
+배열을 오름차순이 아닌 내림차순으로 정렬하려면 어떻게 해야할까?
+sort 메서드에는 매개변수로 함수를 전달할 수 있다.
+
+// sort 내림차순 정렬
+const compare = (a, b) => {
+  if (a > b) return -1;
+  else if (a < b) return 1;
+  else return 0;
+};
+let colors = ["green", "blue", "purple"];
+colors.sort(compare);
+console.log(colors);
+
+compare 함수는 a와 b, 2개의 매개변수를 전달받도록 해준다. a는 배열의 다음 요소를, b는 배열의 이전 요소를 의미하고, a가 b보다 클 때, b가 a보다 클 때, 그리고 그외 이렇게 3가지 조건으로 나눠서 작성한다.
+여기서 조건문의 반환 값으로는 0보다 큰 값, 0, 0보다 작은 값을 사용할 수 있다. 이 반환 값들이 뜻하는 것은, 반환 값이 -1 이라면 다음 요소의 값인 a가 이전 요소의 값인 b 보다 앞에 있어야 하고, 1이라면 b가 a 보다 앞에 있어야하며, 반환값이 0이라면 a와 b의 순서를 바꾸지 않는다 라는 의미이다.
+배열 요소를 내림차순으로 정렬해야하므로, 이전 값이 다음 값보다 커야하기 때문에 다음 요소인 a의 값이, 이전 요소인 b의 값 보다 크다면 -1을 반환해 a가 b보다 앞에 있어야한다고 알려주도록 한다. 마찬가지로 a가 b 보다 작다 라는 조건식에는 1을 반환해주고, 그 외의 경우에는 0을 반환해주도록 한다.
+
+이번에는 문자가 아닌 숫자가 담긴 배열을 정렬한다.
+
+// sort 숫자 배열 정렬 (사전순)
+let numbers = [1, 100, 25, 50, 120, 3];
+numbers.sort();
+console.log(numbers); // [1, 100, 120, 25, 3, 50]
+
+sort 메서드를 이용해 정렬을 하면, 숫자의 크기 순서가 아닌 사전순으로 정렬한다.
+이번에는 사전순이 아닌, 숫자의 크기를 비교하는 함수를 직접 만들어서 sort메서드에 전달해보도록 한다.
+
+// sort 숫자 배열 정렬 (숫자 크기 오름차순)
+const compare = (a, b) => {
+  // 오름차순
+  return a - b;
+};
+let numbers = [1, 100, 25, 50, 120, 3];
+numbers.sort(compare);
+console.log(numbers); // [1, 3, 25, 50, 100, 120]
+
+0보다 작은 값이 반환되면 이전 요소와 다음 요소의 위치를 바꾸기 때문에, 다음 요소에서 이전 요소를 뺀 값이 0보다 커야하므로 다음 요소인 a 에서 이전 요소인 b를 뺀 값이 음수라면, 순서를 바꾸도록 a - b 의 값을 반환해준다.
+이번에는 내림차순으로, 숫자의 크기가 큰 순서부터 정렬되도록 compare 함수를 변경한다.
+
+// sort 숫자 배열 정렬 (숫자 크기 내림차순)
+const compare = (a, b) => {
+  //내림차순
+  return b - a;
+};
+let numbers = [1, 100, 25, 50, 120, 3];
+numbers.sort(compare);
+console.log(numbers); // [120, 100, 50, 25, 3, 1]
+
+이전 요소의 값이 다음 요소의 값보다 크게 정렬해야하기 때문에, 이전 요소인 b 에서 다음 요소인 a 를 뺀 값이 음수일 경우 두 값의 위치를 서로 바꿔주어야 하므로 b에서 a를 뺀 값을 반환해주었다.
+
+sort 메서드는 배열 요소를 원하는 순서대로 정렬할 때 사용되는 내장함수로, sort 메서드를 사용할 때에는 sort 메서드를 한 번 사용하면 이후에 해당 배열 요소의 순서는 정렬된 그대로 변경되어 있다는 것을 주의해서 사용해야 한다.
+
+
+4. reduce
+reduce 에 대해 배워보기 전, forEach라는 내장함수를 사용해 numbers 배열의 요소들의 합을 구해본다.
+
+// forEach를 활용한 배열요소 합 구하기
+let numbers = [1, 100, 25, 50];
+let sum = 0;
+numbers.forEach((elm) => {
+  sum += elm;
+});
+console.log(sum); //176
+
+sum 변수를 출력하면 numbers 배열 요소들을 모두 더한 값인 176이 출력되는 것을 볼 수 있다.
+reduce 메서드는 배열의 모든 요소들에 대해 확인하고 누적된 값을 출력하고 싶을 때 유용하게 사용할 수 있고, 코드를 훨씬 깔끔하게 만들어주는 유용한 내장 함수이다. reduce 메서드는 콜백함수와 initialValue라는 초기값을 전달하고, 이 콜백함수의 매개변수로는 accumulator, currentValue, currentIndex 가 있다.
+
+// reduce
+let numbers = [1, 100, 25, 50];
+let sum = numbers.reduce((acc, cur, idx) => {
+  console.log(acc, cur, idx);
+  return acc + cur;
+}, 0);
+console.log(sum); //176
+
+reduce에는 이렇게 콜백함수와 초기값(initialValue)이 들어가고, 콜백함수의 매개변수로는 acc, cur, idx 이렇게 3가지를 전달받을 수 있다.
+accumulator(acc)는 콜백함수의 반환값을 누적하는 매개변수이고, cur이라는 매개변수는 currentValue 즉, 처리할 현재 요소의 값을 나타내며, currentIndex(idx)는 처리할 현재 배열 요소의 인덱스를 나타낸다.
+여기서 initialValue 초기값은 acc 매개변수가 맨 처음에 갖고있게 될 초기값으로, 이 초기값을 10으로 변경한 다음 sum 변수를 출력한다.
+
+// reduce 초기값 변경
+let numbers = [1, 100, 25, 50];
+let sum = numbers.reduce((acc, cur, idx) => {
+  console.log(acc, cur, idx);
+  return acc + cur;
+}, 10);
+console.log(sum); //186
+
+initialValue 값이 0일 때와 비교를 해보면, 맨 처음의 acc 값이 10으로 변경이 되어 최종적으로 sum 변수의 값이 10차이가 나는 것을 볼 수 있다.
+
+
+5. isArray
+isArray 메서드는 전달된 매개변수가 배열인지 아닌지를 판별하는 내장함수이다.
+
+// isArray
+console.log(Array.isArray([1, 100, 50, 3])); // true
+console.logArray.isArray({ id: 3, color: "purple" })); // false
+console.logArray.isArray("string")); // false
+console.logArray.isArray(undefined)); // false
+
+isArray 메서드는 괄호 안의 매개변수가 배열이면 true를 반환하고, 아니라면 false를 반환한다.
+
+
+이렇게 자바스크립트의 배열 내장함수에는 매우 많은 내장함수들이 있는데, 추가로 어떠한 내장함수들이 있는지 확인하려면 mozila 재단의 공식 사이트를 통해 하나씩 살펴볼 수 있다.
+참고링크 : https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Global_Objects/Array/at
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
