@@ -22,3 +22,7 @@
     <a href="https://stbhg5.tistory.com/237">배열 내장함수-1</a><br/>
     <a href="https://stbhg5.tistory.com/240">배열 내장함수-2</a><br/>
     <br/>
+
+<p>섹션3 자바스크립트 응용하기<p/>
+    <a href="https://stbhg5.tistory.com/244">배열과 객체 구조분해할당</a><br/>
+    <br/>
