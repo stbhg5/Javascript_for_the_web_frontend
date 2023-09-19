@@ -25,4 +25,5 @@
 
 <p>섹션3 자바스크립트 응용하기<p/>
     <a href="https://stbhg5.tistory.com/244">배열과 객체 구조분해할당</a><br/>
+    <a href="https://stbhg5.tistory.com/255">spread와 rest</a><br/>
     <br/>

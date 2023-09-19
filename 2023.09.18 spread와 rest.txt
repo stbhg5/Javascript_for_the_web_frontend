@@ -1,0 +1,161 @@
+[2023.09.18 spread와 rest]
+
+
+1. spread
+spread는 직역하면 확산, 퍼짐, 전파라는 뜻으로, 실제로 특정 배열의 요소나 객체의 프로퍼티 값들을 펼치는 역할을 한다.
+
+// 객체에 spread 사용 전
+const toy = {
+  type: "bear",
+  price: 15000
+};
+const blueToy = {
+  type: "bear",
+  price: 15000,
+  color: "blue"
+};
+const yellowToy = {
+  type: "bear",
+  price: 15000,
+  color: "yellow"
+};
+
+작성한 객체들을 살펴보면, 새로 추가한 객체들과 toy 객체의 프로퍼티 중 type과 price값이 동일한 것을 볼 수 있다.
+이렇게 비슷한 프로퍼티를 가진 객체를 생성하려면, 동일한 코드를 여러번 작성해야하는 번거로운 작업을 해야 한다.
+이와 같은 상황에서 spread 문법을 사용할 수 있다. 반복되는 프로퍼티들을 포함하는 객체의 이름을, ... 기호 뒤에 작성 한다.
+
+// 객체에 spread 사용
+const toy = {
+  type: "bear",
+  price: 15000
+};
+const blueToy = {
+  ...toy,
+  color: "blue"
+};
+const yellowToy = {
+  ...toy,
+  color: "yellow"
+};
+console.log(blueToy);
+console.log(yellowToy);
+
+blueToy와 yellowToy의 프로퍼티에 toy 객체의 프로퍼티인 type: "bear", price: 15000가 할당된 것을 볼 수 있다. spread는 ...를 사용해, 특정 객체가 가진 프로퍼티들을 펼쳐준다.
+
+spread 문법은 객체 뿐만 아니라 배열에서도 사용 가능하다.
+
+// 배열에 spread 사용
+const color1 = ["red", "orange", "yellow"];
+const color2 = ["blue", "navy", "purple"];
+const rainbow = [...color1, "green", ...color2];
+console.log(rainbow);
+
+rainbow라는 배열에 빨주노초파남보의 요소들이 알맞게 들어간 것을 확인할 수 있다.
+이렇게 spread 문법은, 배열이나 객체에서 반복적인 부분을, ... 기호를 사용해 퍼트릴 수 있고, 순서에 상관 없이 여러번 사용할 수도 있다.
+
+
+2. rest
+rest는 "나머지 매개변수" 라고도 하며 rest 문법 또한 ... 기호를 사용하기 때문에 spread 와 비슷해보이지만, 이 둘은 서로 다른 역할을 하는 문법이다.
+rest는 특정 부분들을 하나의 배열이나 객체로 묶는 문법이다.
+
+먼저 blueToy 객체를 생성한 다음, 구조 분해 할당을 통해 blueToy 프로퍼티의 값을 변수들에 할당한다.
+
+// 객체에 구조 분해 할당 rest 사용 전
+const blueToy = {
+  type: "bear",
+  price: 15000,
+  color: "blue"
+};
+const { type, price, color } = blueToy;
+console.log(type);
+console.log(price);
+console.log(color);
+
+여기서 price, color 각각의 값이 아닌, 이들을 type 값을 제외한 나머지의 값으로 묶어 객체 형태로 출력하고 싶다면, price와 color를 rest 문법을 사용해 출력할 수 있다.
+
+// 객체에 구조 분해 할당 rest 사용
+const blueToy = {
+  type: "bear",
+  price: 15000,
+  color: "blue"
+};
+const { type, ...rest } = blueToy;
+console.log(type); // bear
+console.log(rest); // {price: 15000, color: "blue"}
+
+rest 변수는 객체의 형태로 출력되고, 객체 안에는 blueToy 객체 프로퍼티 중 type 값을 제외한 나머지 값들이 들어있는 것을 볼 수 있다.
+rest는 구조 분해 할당을 통해 원하는 값들을 꺼내고 나머지 값을 별도로 묶어서 할당할 수 있다.
+
+// 올바르지 못한 rest 사용
+const { ...rest, type } = blueToy; // SyntaxError
+
+rest 문법은 spread와는 달리 순서에 상관없이, 여러번 작성 할 수 없고 항상 맨 마지막에 작성해야 하기 때문에 주의해서 작성해야 한다.
+
+rest문법을 배열에서 사용해본다.
+
+// 배열에 구조 분해 할당 rest 사용
+const color = ["red", "orange", "yellow", "green"];
+const [c1, c2, ...rest] = color;
+console.log(c1);
+console.log(c2);
+console.log(rest);
+
+배열 구조 분해 할당을 통해 color 배열에서 red, orange 값은 밖으로 꺼내고, rest 문법을 사용해 yellow 와 green 값은 별도의 배열로 묶어 rest 변수에 할당할 수 있다.
+
+
+3. 함수에 spread와 rest 적용
+rest와 spread 문법은 함수에서 유용하게 사용된다.
+
+// 함수에 rest 사용 전
+const print = (a, b, c, d, e, f) => {
+  console.log([c, d, e, f]);
+};
+print(1, 2, 3, 4, 5, 6);
+
+만약 여기서 print 함수가 6개보다 더 많은 매개변수를 받고 동일하게 첫 번째와 두 번째 값을 제외한 나머지 매개변수들을 배열에 담아 출력해야한다고 가정하면, console.log에 무수히 많은 매개변수들을 변수에 담아 출력해야 한다.
+
+// 함수에 rest 사용
+const print = (a, b, ...rest) => {
+  console.log(a, b, rest);
+};
+print(1, 2, 3, 4, 5, 6); // 1 2 [3, 4, 5, 6]
+
+함수의 매개변수에 rest를 사용하게 되면, rest에는 함수에서 받아온 매개변수들로 이루어진 배열이 할당되게 된다.
+rest 매개변수는 함수의 매개변수가 매우 많거나, 몇 개가 될 지 모를 떄, 함수에서 받아온 매개변수들을 배열로 나타내야 될 때 유용하게 사용할 수 있는 문법이다.
+
+이번에는 함수에서 spread와 rest 문법을 모두 사용하는 코드를 작성하기 전에, numbers라는 배열의 요소들을 print 함수의 파라미터로 넘겨, 매개변수의 값을 출력하는 print 함수를 코드로 작성한다.
+
+// 함수에 spread와 rest 사용 전
+const print = (a, b, c, d, e, f) => {
+  console.log(a, b, c, d, e, f);
+};
+const numbers = [1, 2, 3, 4, 5, 6];
+print(numbers[0], numbers[1], numbers[2], numbers[3], numbers[4], numbers[5]);
+
+이 6개의 매개변수와 인수들만 하더라도 작성하기 매우 번거로운데, 만약 numbers 배열에 10개가 넘는 요소가 존재했다면, 코드가 길어지고 코드를 작성하기 더 까다로워 진다.
+
+// 함수에 spread 사용
+const print = (a, b, c, d, e, f) => {
+  console.log(a, b, c, d, e, f);
+};
+const numbers = [1, 2, 3, 4, 5, 6];
+print(...numbers); // spread
+
+함수에서 spread 문법을 사용하면 이렇게 훨씬 간편하게 코드를 작성할 수 있고, spread 문법은 이렇게 인수로 많은 값을 넘겨줘야 할 경우에 자주 사용되는 문법이다.
+print 함수의 매개변수 부분을 살펴보면, numbers 배열의 요소들이 6개인 것을 알고있기 때문에 파라미터로 6개를 작성해주었는데, 이렇게 작성할 경우, numbers 배열의 요소들이 늘어나거나 적어진다면 오류가 발생 할 위험이 있다. 그리고 만약 매개변수로 전달된 값이 매우 많다면, 하나 하나 작성하기 번거롭고 코드의 길이가 길어지게 된다.
+print 함수의 매개변수 부분을 rest 문법을 이용해 작성한다.
+
+// 함수에 spread와 rest 사용
+const print = (...rest) => { // rest
+  console.log(rest);
+};
+const numbers = [1, 2, 3, 4, 5, 6];
+print(...numbers); // spread
+
+rest 문법은 매개변수를 전달 받을 때 훨씬 깔끔한 코드를 작성할 수 있도록 도와주는 문법이다.
+
+정리해보면, spread 문법은 객체나 배열에서 중복된 부분을 퍼트릴 때, 혹은 함수를 호출 할 때 인수로 전달할 값들을 퍼트릴 때 사용된다.
+rest 문법은 객체나 배열에서 특정 부분을 하나의 객체나 배열로 묶어야 할 때, 구조 분해 할당을 사용해 배열이나 객체의 값을 묶어서 할당할 때, 그리고 함수의 매개변수로 많은 값들을 전달 받거나 특정 매개변수들을 제외한 나머지 매개변수들을 묶어서 사용할 때 사용되는 문법이다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
