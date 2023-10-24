@@ -28,4 +28,5 @@
     <a href="https://stbhg5.tistory.com/255">spread와 rest</a><br/>
     <a href="https://stbhg5.tistory.com/258">비동기 처리</a><br/>
     <a href="https://stbhg5.tistory.com/268">Promise 객체</a><br/>
+    <a href="https://stbhg5.tistory.com/272">async와 await</a><br/>
     <br/>
