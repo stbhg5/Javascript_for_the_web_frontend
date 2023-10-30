@@ -1,0 +1,151 @@
+[2023.10.26 DOM API-1]
+
+
+1. DOM API 란?
+DOM API를 이용해 HTML 요소들에 접근하기 위해서는 DOM Tree를 참고해야 하는데 DOM Tree를 자세하게 살펴본다.
+DOM Tree는 크게 document 문서노드, 요소노드, 어트리뷰트 노드, 텍스트 노드로 나타낼 수 있다. DOM API를 이용해 요소에 접근하기 위해 해당 요소들을 찾을 때 문서, 요소, 어트리뷰트, 텍스트 순서로 각각의 노드에 접근해야하고, 이 문서 노드는 트리의 가장 위쪽에 위치하기 때문에 어떤 요소에 접근하든지 항상 이 문서 노드를 거쳐서 다른 요소들에 접근해야 한다.
+자바스크립트가 이 DOM API를 사용해 웹 페이지를 조작하기 위해서는 먼저, 조작하고자하는 요소를 찾아 해당 요소를 선택한 다음, 선택된 요소를 조작해야 한다.
+
+1) 요소 찾고 선택하기 (요소 노드 접근)
+
+<!-- index.html -->
+<body>
+  <div class="today-info">
+    <div class="date" id="date">
+      02.10.금요일
+    </div>
+    <div class="clock" id="clock">
+      15:03
+    </div>
+  </div>
+  <script src="src/index.js"></script>
+</body>
+
+- document.getElementById(id)
+getElementById는 말 그대로 특정 요소를 id값으로 요소를 가져온다 라는 의미이고, 실제로 특정 요소 객체를 반환한다.
+
+// getElementById
+console.log(document.getElementById("date"));
+
+HTML 요소들 중, date라는 id를 갖고있는 요소를 찾은 다음 출력하면, id 값이 date인 요소가 반환된 것을 볼 수 있다. getElementById는 만약 동일한 id를 갖고있는 요소가 여러개 있을 경우, 가장 위에 있는 첫 번째 요소만 반환하는 API 이다.
+
+- document.querySelector(cssSelector)
+단 하나의 요소를 반환하는 또 다른 API 인 querySelector는 요소의 id값이 아닌, css 선택자로 요소 노드를 반환하는 API 이다.
+
+// querySelector
+console.log(document.querySelector("div.date"));
+
+class 이름이 date인 요소가 출력되는 것을 볼 수 있다.
+
+<!-- index.html -->
+<div class="today-info">
+  <div class="date" id="date">
+    02.10.금요일
+  </div>
+  <div class="date" id="clock">
+    15:03
+  </div>
+</div>
+
+- document.querySelectorAll()
+
+// querySelectorAll
+console.log(document.querySelectorAll("div.date")); // NodeList
+
+div 태그로 감싸져 있고, class 이름이 date인 요소를 찾아 출력해보면, 2개의 요소가 출력되는 것을 볼 수 있다.
+
+- document.getElementsByClassName(class)
+동일한 class 이름을 갖고있는 모든 요소들을 출력하는 getElementsByClassName을 사용한다.
+
+// getElementsByClassName
+console.log(document.getElementsByClassName("date")); // HTMLCollection
+
+0번째 요소와 1번째 요소에 두 개의 값이 출력되는 것을 볼 수 있다.
+
+- document.getElementsByTagName
+tag의 이름으로 여러 요소들을 한 번에 찾아본다. getElementsByTagName을 사용하면, 특정 tag의 이름을 갖는 모든 요소들을 가져올 수 있다.
+
+// getElementsByTagName
+console.log(document.getElementsByTagName("div")); // HTMLCollection
+
+div 태그를 사용한 모든 요소들 3개가 모두 출력되는 것을 볼 수 있다.
+
+2) 요소 조작하기 (attribute 노드 접근, 값 조작)
+- className
+getElementById를 사용해 id 값이 date인 요소들을 가져온 다음, 이 요소의 class 이름을 출력한다.
+
+// className
+console.log(document.getElementById("date").className); // date
+
+실제 class 이름인 date가 나온다.
+이 요소의 class 이름을 변경해본다. id 값이 date인 요소를 변수에 따로 저장한 다음, 해당 요소의 class 이름을 change로 수정한다.
+
+// class 이름 변경
+const dateElement = document.getElementById("date");
+dateElement.className = "change"; // class="change"
+
+특정 요소의 class 이름을 변경할 때에는 이렇게 변수의 값을 바꾸는 것과 동일하게 바꿀 이름을 할당해주면 된다.
+
+- id
+class 이름이 date인 요소를 찾고, 해당 요소의 id 값을 출력한다. class 이름이 date인 요소를 하나만 찾기 위해서는 querySelector를 사용한다.
+
+// id
+console.log(document.querySelector("div.date").id);
+
+이 요소의 id 값을 change로 변경 후, 해당 요소를 출력해본다.
+
+// id 이름 변경
+const dateElement = document.querySelector("div.date");
+dateElement.id = "change";
+console.log(dateElement); // id="change"
+
+id 값이 change로 변경되어 잘 출력되는 것을 확인할 수 있다.
+
+- classList
+className과 비슷하게 요소의 class 값에 접근 가능한 classList를 사용한다. id 값이 date인 요소를 찾고, classList를 사용해 해당 요소의 class에 접근한다.
+
+// classList
+console.log(document.getElementById("date").classList); // DOMTokenList
+
+코드를 실행해보면, className을 사용했을 때와는 다른 결괏값이 나오는 것을 볼 수 있다. classList는 className처럼 특정 요소의 class 속성에 접근하지만, class와는 다르게 여러가지 메서드들을 사용할 수 있다. classList는 add, remove, item, toggle, contains, replace와 같은 메서드를 제공한다.
+이 메서드 중에 가장 많이 사용되는 add와 remove 메서드를 사용해본다.
+
+// add, remove
+const dateElement = document.getElementById("date");
+dateElement.classList.add("change"); // class="date change"
+dateElement.classList.remove("date"); // class="change"
+console.log(dateElement);
+
+add를 사용해 class 이름을 change로 변경하면, 해당 요소의 class 이름이 change로 변한 것이 아니라, 기존 이름인 date 에 change 가 추가된 것을 볼 수 있다. className은 요소에 무언가를 대입하면 class 이름 전체가 변경되지만, classList는 이렇게 기존의 값에 특정 값을 추가하거나 제거하고 변경 가능한 속성이다.
+remove를 통해 date 라는 class 이름을 지우면, 실제 해당 요소의 class 이름에서 date가 삭제되어 change만 남아있는 것을 볼 수 있다.
+classList를 사용하면, 이렇게 다양한 메서드를 통해 편리하게 class 속성들을 조작할 수 있다.
+
+3) text 노드 값 조작
+
+<!-- index.html -->
+<div class="today-info">
+  <div class="date" id="date">
+    02.10.금요일
+  </div>
+  <div class="clock" id="clock">
+    15:03
+  </div>
+</div>
+
+- textContent
+텍스트는 textContent를 통해 요소에 새로운 텍스트를 할당할 수 있다. id값이 clock인 요소를 선택해준 다음, textContent를 사용해 텍스트를 "12:00"로 변경해본다.
+
+// textContent (text 노드 값 조작)
+const clockElement = document.getElementById("clock");
+clockElement.textContent = "12:00";
+
+브라우저를 통해 확인하면, 텍스트가 15:03에서 12:00으로 변경된 것을 확인할 수 있다.
+class 이름이 date인 요소를 선택해 "03.29.수요일"로 변경해본다.
+
+const dateElement = document.querySelector("div.date");
+dateElement.textContent = "03.29.수요일";
+
+이렇게 DOM API를 사용해, document 노드를 통해 요소 노드, 어트리뷰트 노드 그리고 텍스트 노드에 접근하고 값을 수정하는 방법을 알아보았다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
