@@ -37,3 +37,8 @@
     <a href="https://stbhg5.tistory.com/277">DOM API-1</a><br/>
     <a href="https://stbhg5.tistory.com/280">DOM API-2</a><br/>
     <br/>
+
+<p>섹션5 프로젝트 준비하기<p/>
+    <a href="https://stbhg5.tistory.com/281">Date 객체와 날짜</a><br/>
+    <br/>
+
