@@ -1,0 +1,62 @@
+[2023.11.02 Date 객체와 날짜]
+
+(섹션5 프로젝트 준비하기)
+
+
+1. Date 객체
+Date 객체는 특정 날짜의 시간과 오늘의 날짜와 시간을 알 수 있어 아주 유용하게 사용되는 자바스크립트의 내장 객체 이다.
+nowDate 라는 변수에, 생성자를 사용해서 Date 객체를 생성하고, "YYYY-MM-DD"의 형태로 "2023-12-21" 을 전달해 nowDate 변수를 출력해본다.
+
+// Date 객체
+let nowDate = new Date("2023-12-21"); // YYYY-MM-DD
+console.log(nowDate); // Thu Dec 21 2023 09:00:00 GMT+0900 (한국 표준시)
+
+Date 객체에 특정 날짜를 전달하면, 그 해당 날짜의 연도, 월, 일, 요일 을 알 수 있다. Date 객체에 아무런 값도 전달하지 않고 코드를 실행해본다.
+
+let nowDate = new Date();
+console.log(nowDate); // 오늘의 연도, 월, 일, 요일, 시간
+
+오늘의 연도, 월, 일, 요일과 시간이 출력된다.
+이 결괏값을 활용해 몇 월 며칠 몇 요일 이라는 문자열을 출력해본다. Date 객체에는 다양한 메서드들이 있는데, 몇 월 인지 알려주는 getMonth, 몇 일 인지 알려주는 getDate, 무슨 요일 인지 알려주는 getDay 메서드를 사용해보도록 한다.
+
+// Date 객체 메서드
+let nowDate = new Date();
+let month = nowDate.getMonth();
+let date = nowDate.getDate();
+let day = nowDate.getDay();
+console.log(`${month}월 ${date}일 ${day}요일`);
+
+오늘의 날짜인 11월 2일 목요일이 아니라 "10월 8일 4요일" 이라는 값이 출력된다.
+지구에서 1년은 총 12개월로, 1월부터 12월까지로 나타낼 수 있기 때문에, Date 객체도 총 12개의 값을 가지고 있다. 하지만 이렇게 11월이 10으로 표시되는 이유는 Date 객체가 월을 표기할 때에는 1월을 0으로, 2월을 1로 나타내고 12월을 11월로 표기하기 때문이다. 따라서 Date객체를 사용해 몇 월인지를 나타낼 때에는 항상 getMonth 메서드의 결괏값 뒤에 1을 더해주어야 한다.
+
+// getMonth() 메서드 결과값 뒤에 1 더하기
+let nowDate = new Date();
+let month = nowDate.getMonth() + 1;
+let date = nowDate.getDate();
+let day = nowDate.getDay();
+console.log(`${month}월 ${date}일 ${day}요일`);
+
+이제는 요일을 알맞게 바꿔본다. getDay 메서드는, 특정 날짜의 요일에 해당하는 값을 숫자로 반환하는 메서드인데, 일요일부터 토요일까지 순서대로 0 부터 6까지의 숫자로 요일을 나타내기 때문에 실제 사용하는 요일로 원하는 값을 얻기 위해서는 사용할 요일의 값이 담긴 배열을 사용해야 한다.
+week라는 배열에 일요일부터 토요일까지 순서대로 요일을 담아 getDay 메서드가 반환한 요일에 맞는 숫자의 인덱스에 필요한 값이 들어가게 한다.
+
+// 요일에 알맞게 출력
+const week = ["일", "월", "화", "수", "목", "금", "토"];
+let nowDate = new Date();
+let month = nowDate.getMonth() + 1;
+let date = nowDate.getDate();
+let day = nowDate.getDay();
+console.log(`${month}월 ${date}일 ${week[day]}요일`);
+
+day라는 변수를 인덱스 번호로 활용해, week[day]요일 이라고 작성하면 원하는 요일을 출력할 수 있다.
+Date객체는 이렇게 날짜 뿐만 아니라, getHours, getMinutes, getSeconds 등의 메서드를 사용해 시간도 나타낼 수 있다.
+
+// getHours(), getMinutes() 메서드
+let nowDate = new Date();
+let hours = nowDate.getHours(); // 0-24
+let minutes = nowDate.getMinutes(); // 0-59
+console.log(`${hours}:${minutes}`); // 11:43
+
+getHours와 getMinutes 메서드는 각각 0부터 24까지, 0부터 59까지의 숫자를 반환하고, 실제 출력 결과를 보면, 현재 시각과 동일하게 출력되는 것을 볼 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
