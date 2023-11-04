@@ -1,0 +1,120 @@
+[2023.11.04 입력 폼 활용하기]
+
+
+1. input 태그
+vscode에 들어가서 탐색기를 통해 form-test 라는 폴더를 만들고 선택한 뒤, index.html에 input 태그를 작성한다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>form-test</title>
+        <meta charset="UTF-8" />
+    </head>
+
+    <body>
+        <div class="main">
+            <input id="input" type="text"/>
+        </div>
+        <script src="./index.js"></script>
+    </body>
+
+</html>
+
+코드 작성 후, 아래의 go live 를 눌러 로컬 서버를 실행해보면 웹페이지에 글자를 입력하는 폼이 생성된 것을 볼 수 있다. input 폼에 '자바스크립트' 라는 문자열을 작성한다. 이 '자바스크립트' 라는 값을 index.js 파일에서 가져와본다.
+dom api 를 사용해 input 요소를 inputElement 변수에 담아본다.
+
+- index.js
+const inputElement = document.getElementById("input");
+console.log(inputElement);
+
+inputElement.addEventListener("mouseover", () => {
+    console.log(inputElement.value);
+})
+
+addEventListener를 사용해 inputElement에 마우스를 올리면, 이 inputElement에 작성된 값을 가져오는 코드를 작성했다. 마우스를 올리면 input요소에 작성된 값을 출력하는 코드를 실행해야하므로, "mouseover" 이벤트를 사용하고, conole.log 를 실행하는 함수를 작성했다. input 요소에 입력된 값은 value 속성을 통해 가져올 수 있고, 코드를 실행하고 입력폼에 마우스를 올리면 콘솔탭에 "자바스크립트" 라는 단어가 출력되는 것을 볼 수 있다.
+
+
+2. select 태그
+select 태그는 드롭다운의 형태로 원하는 항목을 선택할 수 있는 입력폼이다. select 태그의 사용법은 input 태그와는 다르게, select 태그 안에 여러 가지 option 태그들을 넣어 항목들을 작성한다.
+여러가지 색깔을 선택하는 드롭박스를 만들어본다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>form-test</title>
+        <meta charset="UTF-8" />
+    </head>
+
+    <body>
+        <div class="main">
+            <input id="input" type="text"/>
+            <select id="color">
+                <option>노랑</option>
+                <option>초록</option>
+                <option>파랑</option>
+                <option>보라</option>
+            </select>
+        </div>
+        <script src="./index.js"></script>
+    </body>
+
+</html>
+
+select 태그에서 선택된 현재 값을 출력하는 코드를 index.js 파일에서 작성해본다.
+
+- index.js
+const selectElement = document.getElementById("color");
+
+selectElement.addEventListener("change", () => {
+    console.log(selectElement.value);
+})
+
+getElementById를 사용해 select 요소를 가져온 다음, select 요소의 값이 변경됐을 때, 변경된 값을 출력하는 코드를 작성했다.
+코드를 저장하고, select 값을 동일하게 선택하면 아무런 값이 출력되지 않지만, 다른 값으로 변경해보면, 변경된 값이 바로 바로 출력되는 것을 볼 수 있다.
+
+이번에는 select 태그 아래에, div 태그의 텍스트로, 현재 선택 된 값을 표시하는 코드를 작성해본다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>form-test</title>
+        <meta charset="UTF-8" />
+    </head>
+
+    <body>
+        <div class="main">
+            <input id="input" type="text"/>
+            <select id="color">
+                <option>노랑</option>
+                <option>초록</option>
+                <option>파랑</option>
+                <option>보라</option>
+            </select>
+            <div id="result">노랑</div>
+        </div>
+        <script src="./index.js"></script>
+    </body>
+
+</html>
+
+index.js에서 id가 result인 요소를 resultElement 변수에 저장한 다음, selectElement의 값이 변경될 때마다, 이 resultElement의 텍스트를 변경된 값으로 설정해주는 코드를 작성해본다.
+
+- index.js
+const selectElement = document.getElementById("color");
+const resultElement = document.getElementById("result");
+
+selectElement.addEventListener("change", () => {
+    console.log(selectElement.value);
+    resultElement.textContent = selectElement.value;
+})
+
+코드를 저장한 다음, 드롭다운의 값을 변경해보면, 값이 변경되는 즉시 아래에 div 요소의 텍스트도 동일한 값으로 변경되는 것을 볼 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
