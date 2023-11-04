@@ -41,4 +41,5 @@
 <p>섹션5 프로젝트 준비하기<p/>
     <a href="https://stbhg5.tistory.com/281">Date 객체와 날짜</a><br/>
     <a href="https://stbhg5.tistory.com/282">VSCode 설치 및 설정</a><br/>
+    <a href="https://stbhg5.tistory.com/283">입력 폼 활용하기</a><br/>
     <br/>
