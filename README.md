@@ -44,3 +44,7 @@
     <a href="https://stbhg5.tistory.com/283">입력 폼 활용하기</a><br/>
     <a href="https://stbhg5.tistory.com/284">localStorage로 데이터 저장</a><br/>
     <br/>
+
+<p>섹션6 [프로젝트] 나만의 크롬 시작화면<p/>
+    <a href="https://stbhg5.tistory.com/285">프로젝트 미리보기 및 코드 주소</a><br/>
+    <br/>
