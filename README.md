@@ -48,3 +48,8 @@
 <p>섹션6 [프로젝트] 나만의 크롬 시작화면<p/>
     <a href="https://stbhg5.tistory.com/285">프로젝트 미리보기 및 코드 주소</a><br/>
     <br/>
+
+<p>섹션7 [부록] 꼭 알아야하는 css<p/>
+    <a href="https://stbhg5.tistory.com/286">요소를 배치하는 방법-position</a><br/>
+    <a href="https://stbhg5.tistory.com/287">요소의 레이아웃을 결정하는 방법-display</a><br/>
+    <br/>
