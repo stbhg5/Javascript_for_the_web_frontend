@@ -1,0 +1,177 @@
+[2023.11.07 요소의 레이아웃을 결정하는 방법-display]
+
+
+2. display
+display는 HTML 요소들을 어떻게 보여줄지를 결정하는 속성으로, 실제로 정말 많이, 그리고 유용하게 사용하는 속성이며 웹을 개발하기 위해 꼭 알고 있어야 하는 속성 중 하나이다. display 속성에는 none, block, inline, inline-block 그리고 grid, flex 등의 다양한 값들이 있다.
+
+1) block, inline, inline-block, none
+class 이름이 속성값-setting 으로 되어있는 모든 요소들은 CSS 상에서, width 와 height 의 값을 각각 300px, 200px 으로 설정한다.
+
+- 예제 html
+<body>
+    <div class="block">block</div>
+    <div class="bloc-setting">block-setting</div>
+    <div class="inline">inline</div>
+    <div class="inline-setting">inline-setting</div>
+    <div class="inline-block">inline-block</div>
+    <div class="inline-block-setting">inline-block-setting</div>
+    <div class="none">none</div>
+</body>
+
+- 예제 css
+.block {
+    display: block;
+}
+.block-setting {
+    display: block;
+    width: 300px;
+    height: 200px;
+}
+
+# block
+display block 값을 갖는 요소를 보면, 기본적으로 가로의 길이가 100% 로 설정이 되며, 한 줄의 하나의 div만 배치되는 것을 확인 할 수 있다. block-setting 이라고 적힌 div를 보면, 설정 했던 길이와 높이의 값이 적용이 되어 표시 되는 것을 알 수 있다.
+
+# inline
+inline 값은 기본적으로 한 줄에 여러개의 div가 배치되고, 길이와 높이의 값을 설정해놓더라도 inline div 안의 내용에 따라 길이와 높이가 결정되는 것을 볼 수 있다.
+
+# inline-block
+inline-block 은 말 그대로, inline 특징과 block 특징 모두가 적용된 값으로, 기본적으로 한 줄에 여러개의 div가 배치되며, div 안의 내용에 따라 길이와 높이가 결정되지만, inline-block-setting 에서 처럼 길이와 높이를 설정하면, 설정한 값으로 크기가 적용이 되는 것을 확인할 수 있다.
+
+# none
+display 속성값을 none 으로 주게 되면, 그 요소가 존재하지 않았던 것처럼 사라지게 된다.
+
+# 정리
+            block               inline              inline-block
+배치        한 줄에 하나        한 줄에 여러 개     한 줄에 여러 개
+기본        길이 100% 적용      내용에 따라 적용    내용에 따라 적용
+크기 설정   적용                적용X               적용
+
+2) grid
+grid 는 말그대로 격자를 뜻한다. grid 값을 설정하게 되면, 해당 요소 바로 밑에 있는 모든 자식 요소들은 grid-item 이 된다.
+
+- 예제 html
+<div class="grid-wrapper">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+</div>
+
+- 예제 css
+.grid-wrapper {
+    display: grid;
+}
+
+display 속성에 grid 값만 적용하게 되면, 각 자식 요소들이 차례대로 하나의 열에 자식 요소들 수의 행만큼 일정하게 배치된다.
+
+# grid-template
+grid 의 행과 열은 grid-template-rows, grid-template-columns 속성으로 조절할 수 있다.
+grid-template-colums 속성을 적용한 div들의 배치 먼저 살펴본다.
+
+- 예제 css
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: 80px 80px 80px;
+}
+
+grid-template-colums 속성은 그리드 컨테이너 내에서 열의 크기와 간격을 정의하는 속성이다. columns 에 들어갈 아이템의 길이를 80px 씩 3개로 입력하게 되면, 1개의 행에 3개의 div 가 80px 의 크기로 생성된다.
+
+- 예제 css
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+}
+
+fr 이라는 단위는 사용 가능한 공간을 일정 비율로 나타낸 단위로, 2fr 1fr 1fr 로 사용할 경우, 1개의 행에 길이가 2 : 1 : 1 의 비율인 요소 3개가 들어가게 된다.
+grid-template-rows 도 살펴본다.
+
+- 예제 css
+.grid-wrapper {
+    display: grid;
+    grid-template-rows: 35px 45px 55px 65px 75px;
+}
+
+grid-template-rows 속성은 그리드 컨테이너 행의 크기를 정의하는 속성이다. 1개의 row에 각각 35px, 45px, 55px, 65px, 75px 만큼 행의 높이가 설정되는 것을 볼 수 있다.
+
+- 예제 css
+.grid-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 100px 200px;
+}
+
+grid-template-colums와 grid-template-rows를 모두 사용해본다. 두 속성을 동시에 적용하게 되면, 행의 높이는 각각 100px과 200px로, 열의 가로 길이는 1:1:1 비율로 그리드를 생성하게 된다.
+
+3) flex
+flex 값을 적용한 박스 안의 요소들은 일열로 배치되게 된다. 이렇게 배치된 요소들은 어떤 방향으로든 배치될 수 있고, 커지거나 축소하여 크기 조정 및 정렬을 쉽게 조작할 수 있도록 유연해지게 된다. flex 값이 적용 된 박스의 하위 요소들을 조작하기 위해서는 두 가지 속성을 알아야 하는데, justify-content 속성과 align-items 속성이 있다.
+
+- 예제 html
+<div class="flex-wrapper">
+    <div>1</div>
+    <div>2</div>
+    <div>3</div>
+    <div>4</div>
+    <div>5</div>
+</div>
+
+# justify-content
+- 예제 css
+.flex-wrapper {
+    display: flex;
+    justify-content: flex-start;
+}
+.flex-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+.flex-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+display flex 값을 적용하게 되면 기본적으로 justify-content flex-start 값이 적용되며, 요소들을 flex 박스의 왼쪽으로 정렬한다.
+flex-end 는 요소들을 flex 박스의 우측 (끝) 으로 정렬하고, center는 요소들을 가운데로 정렬하는 속성이다.
+
+- 예제 css
+.flex-wrapper {
+    display: flex;
+    justify-content: space-around;
+}
+.flex-wrapper {
+    display: flex;
+    justify-content: space-between;
+}
+.flex-wrapper {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+space-around 는 요소 주변의 (양옆) 간격을 동일하게 두고 정렬된다. space-between 는 첫 번째 요소는 가장 왼쪽에 (시작), 마지막 요소는 가장 오른쪽에 (끝) 두고, 나머지 요소들은 사이의 간격을 동일하게 두고 정렬된다. space-evenly 는 요소 사이의 간격을 전부 동일하게 두고 정렬된다.
+
+# align-items
+align-items 속성은 justify-content 속성과는 다르게 세로를 기준으로 하위 요소들의 위치를 조절하는 속성이다.
+
+- 예제 css
+.flex-wrapper {
+    display: flex;
+    align-items: start;
+}
+.flex-wrapper {
+    display: flex;
+    align-items: center;
+}
+.flex-wrapper {
+    display: flex;
+    align-items: end;
+}
+.flex-wrapper {
+    display: flex;
+    align-items: stretch;
+}
+
+display flex 가 적용된 박스의 높이를 100px 로 잡고, align-items 속성 값을 변경하면서 살펴본다.
+align-items 값을 start 로 적용하면, 하위 요소들은 박스의 시작 부분, 즉 가장 윗 부분에 정렬된다. center 값을 적용하면 박스의 중앙 부분에, end 값을 적용하면 박스의 가장 아랫부분으로 정렬된다. stretch 속성은 start, center, end 값과 달리, 하위 요소들의 높이가 display flex 값이 적용된 박스의 높이와 동일하게 늘어난다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C

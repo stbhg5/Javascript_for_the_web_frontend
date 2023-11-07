@@ -1,0 +1,123 @@
+[2023.11.07 요소를 배치하는 방법-position]
+
+(섹션7 [부록] 꼭 알아야하는 css)
+
+
+1. position
+position 속성은 웹 문서 상에 요소를 배치하는 방법을 지정한다. position 속성의 값으로는 static, relative, absolute, fixed, sticky 가 있고, top, right, bottom, left 속성으로 요소를 배치할 최종 위치를 결정한다.
+
+- 예제 html
+<body>
+    <div class="yellow"></div>
+    <div class="blue"></div>
+    <div class="green"></div>
+</body>
+
+1) static
+- 예제 css
+.yellow {
+    position: static;
+}
+.blue {
+    position: static;
+}
+.green {
+    position: static;
+}
+
+모든 웹 요소들은 기본적으로 position 값이 static 이다. static의 경우, 웹페이지에 노랑 파랑 초록 순서로 쌓이게 된다.
+
+2) relative
+- 예제 css
+.yellow {
+    position: relative;
+    right: 50px;
+}
+.blue {
+    position: relative;
+    left: 50px;
+}
+.green {
+    position: relative;
+    bottom: 50px;
+}
+
+position 값이 static 일 때의 위치를 기준으로, 웹 요소들의 위치를 변경하고 싶을 때, 값을 relative로 설정한다. right 50px 이 적용된 노랑 div 는 노란색 div가 static 속성일 때의 상태를 기준으로 오른쪽으로 50px 만큼 떨어져있고, left 50px 이 적용된 파랑 div는 static일 때를 기준으로 왼쪽으로 50px 만큼, bottom 50px 이 적용된 초록 div도 static일 때를 기준으로 아래에서부터 50px 만큼 이동된다.
+
+3) absolute
+position absolute 는 relative 와는 다르게, position 값이 static 이 아닌 부모를 기준으로 움직인다. position absolute 속성을 parent div 가 static일 경우와 그렇지 않을 때로 나누어 살펴본다.
+html 코드를 yellow, blue, green div를 parent div가 감싸도록 수정한다.
+
+- 예제 html
+<body>
+    <div class="parent">
+        <div class="yellow"></div>
+        <div class="blue"></div>
+        <div class="green"></div>
+    </div>
+</body>
+
+parent div는 회색으로 표시한다.
+먼저 부모 div가 static이 아닌 position relative일 경우를 살펴본다.
+
+- 예제 css
+.parent {
+    position: relative;
+}
+.yellow {
+    position: absolute;
+    right: 50px;
+}
+.blue {
+    position: absolute;
+    left: 50px;
+}
+.green {
+    position: absolute;
+    bottom: 50px;
+}
+
+부모 div를 기준으로 오른쪽에서, 왼쪽에서, 아래에서 각각 50px 만큼 떨어져 있는 것을 확인 할 수 있다.
+class 가 parent인 div 가 position static 값을 가지고 있는 경우를 살펴본다.
+
+- 예제 css
+.parent {
+    position: static;
+}
+.yellow {
+    position: absolute;
+    right: 50px;
+}
+.blue {
+    position: absolute;
+    left: 50px;
+}
+.green {
+    position: absolute;
+    bottom: 50px;
+}
+
+부모의 position 값이 static 일 경우, absolute 속성은 position이 static이 아닌 부모를 기준으로 움직이기 때문에, 부모인 parent div 가 아닌, 조상인 body 를 기준으로 top, bottom, right, left 값이 적용되는 것을 확인할 수 있다.
+
+4) fixed, sticky
+스크롤이 가능한 웹 페이지라고 가정해보고, 노랑색 div 의 position 값은 sticky 로 주고, 파랑색 div의 position 값을 fixed로 준다.
+
+- 예제 css
+.parent {
+    height: 300px;
+    width: 700px;
+    background-color: gray;
+}
+.yellow {
+    position: sticky;
+    top: 0px;
+}
+.blue {
+    position: fixed;
+    left: 50px;
+}
+
+스크롤을 내리면서 확인 해보면, 스크롤을 아무리 내리더라도 파랑색 div 는 left 50px 의 동일한 위치에 표시되지만, 노랑색 div는 부모 div를 따라서 올라가는 것을 볼 수 있다. sticky와 position은 모두 스크롤할 때 요소를 고정시킬 수 있는 기능을 제공하는 공통점이 있지만, sticky 속성을 적용한 div는 스크롤을 계속 내리다가 부모 요소의 마지막까지 도달하면 해당 요소도 스크롤에 따라 움직이지만, fixed 속성을 적용한 div는 스크롤을 내려도 화면에서 사라지지 않고 항상 같은 위치에 있게 되는 차이점이 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
