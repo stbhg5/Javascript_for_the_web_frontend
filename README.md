@@ -47,6 +47,7 @@
 
 <p>섹션6 [프로젝트] 나만의 크롬 시작화면<p/>
     <a href="https://stbhg5.tistory.com/285">프로젝트 미리보기 및 코드 주소</a><br/>
+    <a href="https://stbhg5.tistory.com/288">디지털 시계 개발하기</a><br/>
     <br/>
 
 <p>섹션7 [부록] 꼭 알아야하는 css<p/>
