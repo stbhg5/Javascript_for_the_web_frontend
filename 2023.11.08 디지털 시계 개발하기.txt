@@ -1,0 +1,212 @@
+[2023.11.08 디지털 시계 개발하기]
+
+
+1. 시계 만들기
+vscode에 들어가서 탐색기를 통해 newtab 이라는 폴더를 만들고 선택한 뒤, index.html 파일을 작성한다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>newtab</title>
+        <meta charset="UTF-8"/>
+    </head>
+
+    <body>
+        <div class="main-container">
+            <div class="main-wrapper">
+                <div class="today-info">
+                    <div class="date" id="date">
+                        <!-- 날짜&요일 -->
+                    </div>
+                    <div class="time" id="time">
+                        <!-- 현재 시간 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+		<script src="./js/clock.js"></script>
+    </body>
+    
+</html>
+
+body태그 안에는 class이름이 main-container인 div를 만들어준 다음, "크롬 시작화면"에서 사용될 오늘의 날짜와 현재 시간을 알려주는 디지털 시계를 만들어볼 것이기 때문에 먼저 js라는 폴더를 만들고 clock.js라는 자바스크립트 파일을 만들어준다.
+main-container div의 안에 main-wrapper라는 class이름을 갖는 div를 만들고, 그 안에는 today-info라는 div와, class와 id이름이 date, time인 div 두 개를 작성한다.
+마지막으로 코드를 구분하기 쉽게 주석으로 "날짜와 요일", "현재 시간" 이라고 작성해준다.
+
+- clock.js
+const dateElement = document.getElementById("date");
+const timeElement = document.getElementById("time");
+
+const modifyNumber = (number) => {
+     return parseInt(number) < 10 ? "0" + number : number;
+};
+
+// 날짜 가져오기
+const getNowDate = () => {
+		const nowDate = new Date();
+		const week = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+		let month = modifyNumber(nowDate.getMonth() + 1);
+		let date = modifyNumber(nowDate.getDate());
+		let day = week[nowDate.getDay()];
+        // console.log(month, date, day);
+		setNowDate(month, date, day);
+};
+
+// 가져온 날짜 요소에 설정
+const setNowDate = (month, date, day) => {
+    dateElement.textContent = `${month}월 ${date}일 ${day}`;
+};
+
+// 시간 가져오기
+const getNowTime = () => {
+    const nowDate = new Date();
+    let hour = modifyNumber(nowDate.getHours());
+    let minute = modifyNumber(nowDate.getMinutes());
+    // console.log(hour, minute);
+    setNowTime(hour, minute);
+};
+
+// 가져온 시간 요소에 설정
+const setNowTime = (hour, minute) => {
+    timeElement.textContent = `${hour} : ${minute}`;
+};
+
+getNowDate();
+getNowTime();
+
+날짜와 요일을 나타내는 요소를 dateElement에 할당하고, 현재 시간을 나타내는 요소를 timeElement에 넣어준다.
+getNowDate라는 함수를 생성하고 내부에 날짜를 가져오는 기능의 코드를 작성한다. getMonth 메서드는 0부터 11까지의 숫자를 반환하기 때문에 getMonth의 반환값에 + 1을 해주고, 알맞은 요일을 표시하기 위해 week라는 변수에는 일요일부터 토요일까지의 값을 배열에 담아준 다음, getDay 메서드가 반환하는 값을 week 배열에 인덱스로 사용한다.
+날짜를 조금 더 깔끔하게 나타내기 위해 한 자릿수인 월 앞에 '0'을 붙이는 함수를 modifyNumber 라는 이름으로 생성하여, 매개변수로 특정 숫자를 받아 이 숫자의 값이 10보다 작은 1자릿수라면, 숫자의 앞에 0을 붙여 반환해주도록 작성한다. 이 함수에서 매개변수 값을 숫자와 비교해야하기 때문에 임의로 자료형을 변환해주는 "묵시적 형 변환"을 사용해 parseInt로 number의 값에 어떤 값이 오던지 숫자로 변환하게 한다.
+오늘의 날짜를 요소에 설정해주는 setNowDate 함수를 작성하는데, 매개변수로 month, date, day 를 받아야하고, 함수의 내부에서는 dateElement에 textContent로 month월 date일 day 라는 값을 설정해준다.
+시간을 가져오는 getNowTime 함수도 작성한다.
+timeElement에 현재 시간을 텍스트로 넣어주는 setNowTime 함수도 작성한다.
+
+이제 스타일을 설정하기에 앞서 css 파일도 마찬가지로 html 문서가 포함할 수 있도록 <link rel="stylesheet" href="./css/main.css"/> 코드를 head 태그의 내부에 작성하고, 프로젝트에 폰트를 적용해주기 위해, 크롬에 "구글 폰트" 를 검색해 해당 사이트에 들어가서 Noto sans 폰트를 눌러 오른쪽에 나오는 Use on web의 코드를 복사해서 head 태그의 내부에 넣어준다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>newtab</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="./css/main.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="main-container">
+            <div class="main-wrapper">
+                <div class="today-info">
+                    <div class="date" id="date">
+                        <!-- 날짜&요일 -->
+                    </div>
+                    <div class="time" id="time">
+                        <!-- 현재 시간 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+		<script src="./js/clock.js"></script>
+    </body>
+    
+</html>
+
+이후 css라는 폴더를 만들고 main.css라는 파일을 만들어준다.
+
+- main.css
+:root {
+    --xlarge: 170px;
+    --large: 28px;
+    --medium: 18px;
+    --small: 16px;
+    --xsmall: 14px;
+}
+
+body {
+    margin: 0 auto;
+    width: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.main-container .main-wrapper {
+    text-align: center;
+}
+
+/* 시계 */
+.main-wrapper .date {
+    font-size: var(--large);
+    font-weight: 400;
+}
+.main-wrapper .time {
+    font-size: var(--xlarge);
+    font-weight: 400;
+    margin-top: -35px;
+}
+
+생성한 css 파일에서는, :root 에 사용할 폰트 사이즈를 크기별로 지정해주도록 한다.
+body에는 font-family를 'CSS rules to specify families' 에 있는 코드를 복사해서 넣어주고, width:100%, margin: 0 auto; 속성을 넣어준다.
+기본적인 스타일 세팅이 끝났으니, class 이름이 main-container 인 요소의 스타일을 설정한다. main-container 에는 display flex를 해주고 가로, 세로 가운데 정렬을 위해 justify-content center와 align-items center를 해주고, 이 main-container의 세로 길이가 화면에 꽉 차게끔 100vh 를 적용한다.
+main-wrapper 에서는 텍스트를 가운데 정렬하는 text-align center를 해주고, date의 텍스트 사이즈를 :root 에 설정해주었던 large 사이즈로, time의 텍스트 사이즈는 x-large로 설정해주고 글씨 굵기를 400으로 설정한다.
+
+여기서 한 가지 이상한 점은, 디지털 시계는 시간이 흐르면 시와 분이 알맞게 변경되어야 하는데 지금 이 시계는 이전의 시간에 멈춰있는 것을 볼 수 있다. 이 시계가 현재의 시간을 나타낼 수 있도록, 1초에 한 번씩 현재 시간을 가져오는 코드를 실행시켜 주어야 한다. clock.js 로 돌아가서 코드를 추가한다.
+
+- clock.js
+const dateElement = document.getElementById("date");
+const timeElement = document.getElementById("time");
+
+const modifyNumber = (number) => {
+     return parseInt(number) < 10 ? "0" + number : number;
+};
+
+// 날짜 가져오기
+const getNowDate = () => {
+		const nowDate = new Date();
+		const week = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+		let month = modifyNumber(nowDate.getMonth() + 1);
+		let date = modifyNumber(nowDate.getDate());
+		let day = week[nowDate.getDay()];
+        // console.log(month, date, day);
+		setNowDate(month, date, day);
+};
+
+// 가져온 날짜 요소에 설정
+const setNowDate = (month, date, day) => {
+    dateElement.textContent = `${month}월 ${date}일 ${day}`;
+};
+
+// 시간 가져오기
+const getNowTime = () => {
+    const nowDate = new Date();
+    let hour = modifyNumber(nowDate.getHours());
+    let minute = modifyNumber(nowDate.getMinutes());
+    // console.log(hour, minute);
+    setNowTime(hour, minute);
+};
+
+// 가져온 시간 요소에 설정
+const setNowTime = (hour, minute) => {
+    timeElement.textContent = `${hour} : ${minute}`;
+};
+
+getNowDate();
+getNowTime();
+setInterval(getNowTime, 1000); // setInterval(함수, 밀리세컨드) : 일정한 시간 간격으로 반복적으로 특정 함수 실행하는 내장함수
+
+setInterval 이라는 일정한 시간 간격으로, 반복적으로 특정 함수를 실행할 수 있는 내장함수가 있는데, setTimeout 함수와 비슷하게 매개변수로 실행될 함수와 ms를 전달받는다.
+시계가 현재 시간을 나타낼 수 있게 하기 위해서는 setInterval 함수를 사용해, 현재 시간을 나타내는 함수인 getNowTime을 1초마다 실행해야 한다.
+코드를 작성하고 저장하면, 화면에 현재 시간이 알맞게 나타나있는 것을 확인할 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
