@@ -1,0 +1,102 @@
+[2023.11.09 검색바 만들기]
+
+
+2. 검색 바 만들기
+검색어를 입력하면 구글의 검색 결과 창으로 이동하는 기능을 개발해본다.
+index.html 에서 main-wrapper div 안에 class 이름이 search인 div를 작성해주고, 그 안에는 id 이름이 search-input인 input 태그를 작성 한다. input 태그에는 placeholder로 "검색어를 입력하세요" 라는 문구를 작성해주고, 그 다음 js 폴더에 search.js 파일을 만들고, index.html의 body 태그 아래에, 생성한 search.js 를 html 문서에 포함시킨다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>newtab</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="./css/main.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="main-container">
+            <div class="main-wrapper">
+                <div class="today-info">
+                    <div class="date" id="date">
+                        <!-- 날짜&요일 -->
+                    </div>
+                    <div class="time" id="time">
+                        <!-- 현재 시간 -->
+                    </div>
+                </div>
+                <div class="search">
+                    <input id="search-input" placeholder="검색어를 입력하세요" autocomplete="off"/>
+                </div>
+            </div>
+        </div>
+		<script src="./js/clock.js"></script>
+        <script src="./js/search.js"></script>
+    </body>
+    
+</html>
+
+코드를 저장하고, go live 버튼을 눌러 코드를 실행하면, 화면에 "검색어를 입력하세요" 라는 글자가 적힌 input 폼이 나타나있는 것을 볼 수 있다. 이 input 폼을 눌렀을 때, 아래에 이전에 검색했던 기록들이 나오면 input 태그에 autocomplete 속성을 off 로 설정한다.
+
+- search.js
+const searchInput = document.getElementById("search-input");
+
+const showSearchResult = () => {
+    let searchWord = searchInput.value;
+	window.location.href = `https://google.com/search?q=${searchWord}`;
+	searchWord = "";
+};
+
+const enterKey = (event) => {
+    if (event.code === "Enter") {
+        showSearchResult();
+    }
+};
+
+searchInput.addEventListener("keypress", (event) => {
+    enterKey(event);
+});
+
+input 폼을 조작하기 위해 getElementById로 input요소를 가져온다.
+이 input 폼에 검색어를 입력하고 엔터를 누르면, 그 값을 검색한 결과 페이지로 이동시켜야하는 기능을 만들어야하기 때문에, showSearchResult 라는 함수 안에 searchWord 라는 변수를 선언하고 searchInput 요소에 입력된 값을 할당해준 다음, 특정 페이지로 이동할 수 있는 window의 location.href 를 이용해 "https://www.google.com/search?q=" 주소의 뒤에는 이 searchWord 변수의 값인, input폼에 입력한 값을 적어서, 실제로 그 검색어를 검색한 결과 페이지로 이동하게 한다. 검색 결과 페이지로 이동한 다음, searchWord를 빈 문자열로 변경한다.
+검색어를 입력하고 엔터를 눌렀을 때 이 showSearchResult 함수가 실행될 수 있도록 enterKey 라는 함수를 생성하고, 매개변수로는 event를 받아 이 event의 코드가 Enter라면 showSearchResult 함수를 실행하게 한다. enterKey 함수의 매개변수인 event는 searchInput에 addEventListener를 사용해, 특정 키를 누르는 이벤트인 "keypress" 를 통해 받아올 수 있다.
+searchInput의 addEventListener에 작성되는 함수의 매개변수로 event를 받고, 이 event를 enterKey 함수에 인수로 전달해주면, 사용자가 누르는 키가 event로 넘겨져, 누르는 키가 enter key라면 showSearchResult 함수를 실행시켜 입력한 검색어를 검색한 결과 페이지로 이동시킬 수 있다.
+실제로 웹 페이지에서 검색어를 입력하고 엔터 키를 누르면, 검색 결과 페이지로 이동하고, 뒤로가기를 누르면 다시 개발한 페이지로 돌아오는 것을 볼 수 있다.
+
+검색바의 스타일을 수정한다.
+
+- main.css
+...
+
+/* 검색 */
+.main-wrapper .search {
+    display: flex;
+    justify-content: center;
+}
+.main-wrapper #search-input {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    font-size: var(--medium);
+    padding: 15px 0px;
+    border-radius: 30px;
+    border: 0px;
+    width: 600px;
+    text-align: center;
+    margin-top: -15px;
+}
+
+.main-wrapper #search-input::placeholder {
+    color: rgb(169, 169, 169);
+    font-size: var(--medium);
+}
+
+class 이름이 search div에 display flex, justify-content center를 작성해 가운데로 배치해준 다음, id가 search-input인 input 폼의 길이는 600px 정도로 설정해주고, 배경 색은 검정색에 50% 정도 불투명하게 설정하고, 글씨 색은 흰색으로, 글씨 크기는 medium 으로 설정한다. 그 다음, padding을 위 아래로 15px을 주고, input 폼의 모양을 둥글게 하기 위해 border-radius를 30px로 설정한다. 그리고 이 테두리를 없애기 위해 border를 0px로 설정하고, 가운데 정렬을 하기 위해 text-align center를 작성한 다음, margin-top -10px을 설정해 위로 살짝 올려준다.
+placeholder 인 "검색어를 입력하세요" 의 스타일을 설정한다. 글자 색상은 약간 회색으로 변경하고, 글자의 크기는 동일하게 medium으로 설정한다.
+이렇게 코드를 작성하면 input 폼에 예쁘게 스타일이 적용된 것을 볼 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
