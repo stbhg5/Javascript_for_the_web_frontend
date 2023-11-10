@@ -1,0 +1,127 @@
+[2023.11.10 API를 사용해 명언 설정하기]
+
+
+3. 명언 설정하기
+명언 api를 사용해 명언을 나타내본다.
+index.html에서 class와 id가 quote인 div 요소를 main-wrapper div의 아래에 추가한다. 주석으로 <!-- 명언 --> 이라고 표시를 해주고, js 폴더 안에 quote.js 파일을 만들고 index.html의 body 태그 제일 아래에 스크립트를 추가한다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>newtab</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="./css/main.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="main-container">
+            <div class="main-wrapper">
+                <div class="today-info">
+                    <div class="date" id="date">
+                        <!-- 날짜&요일 -->
+                    </div>
+                    <div class="time" id="time">
+                        <!-- 현재 시간 -->
+                    </div>
+                </div>
+                <div class="search">
+                    <input id="search-input" placeholder="검색어를 입력하세요" autocomplete="off"/>
+                </div>
+            </div>
+            <div class="quote" id="quote">
+                <!-- 명언 -->
+            </div>
+        </div>
+		<script src="./js/clock.js"></script>
+        <script src="./js/search.js"></script>
+        <script src="./js/quote.js"></script>
+    </body>
+    
+</html>
+
+quote.js 에서는 api를 통해 받아온 명언을 웹 페이지에 나타내주는 기능을 개발한다.
+
+- quote.js
+const API_URL = "https://random-quote.hyobb.com/"; // https://port-0-random-quote-4uvg2mleme84ru.sel3.cloudtype.app/
+const quoteElement = document.getElementById("quote");
+const quoteItem = localStorage.getItem("quote");
+
+// 현재시간
+const nowDate = new Date();
+const month = nowDate.getMonth() + 1;
+const date = nowDate.getDate();
+
+// 가져온 명언 localStorage, 요소에 설정
+const setQuote = (result) => {
+	let quote = {createDate: `${month}-${date}`, quoteData: result};
+    localStorage.setItem("quote", JSON.stringify(quote));
+    quoteElement.textContent = `"${result}"`;
+};
+
+// API를 사용해 명언 가져오기
+const getQuote = async () => {
+    try {
+        const data = await fetch(API_URL).then((res) => res.json());
+        // console.log(data);
+        const result = data[1].respond;
+        // console.log(result);
+		setQuote(result);
+    } catch (err) {
+        console.log(`err : ${err}`);
+        setQuote("만약 하루를 성공하고 싶다면, 반드시 첫 한 시간을 성공해야 한다.");
+    }
+};
+
+if (quoteItem) {
+    // localstorage에 quote가 있다면
+    let {createDate, quoteData} = JSON.parse(quoteItem); // 구조분해할당
+    if (createDate === `${month}-${date}`) { // 오늘 날짜와 비교
+        quoteElement.textContent = `"${quoteData}"`;
+    } else {
+        getQuote();
+    }
+} else {
+    // localstorage에 quote가 없다면
+    getQuote();
+}
+
+api 주소를 API_URL 이라는 상수에 할당해주고, id 이름이 quote인 요소를 quoteElement에 할당한다.
+getQuote라는 함수를 생성하고, 이 함수의 내부에서는 api 를 호출해 명언 데이터를 받아준다. fetch 안에 사용할 api 주소인 API_URL을 넣어주고, then 메서드로 결괏값을 json메서드를 사용해 자바스크립트 객체의 형태로 변환해 data 라는 변수에 값을 할당한다. fetch 함수는 비동기 함수이기 때문에 앞에는 await 키워드를 작성해주고, 이 await 키워드는 async 키워드가 붙은 함수의 내부에서만 사용 가능하므로, getQuote 함수에는 async 키워드를 작성한다. data를 콘솔탭에 출력해보면, 배열에 0번째 인덱스에는 result 값이, 1번째 인덱스에는 respond 값이 담겨져 오는 것을 볼 수 있다. 1번째 인덱스에 있는 respond 값을 사용해야 하므로, result 변수에 data의 첫 번째 인덱스의 respond 값을 담아준다. result 값을 setQuote 함수의 인수로 전달한다. api를 호출하는 코드를 try catch를 사용해 에러처리를 한다. 만약 에러가 발생할 상황을 대비해서, catch 블록 내부에는 가장 좋아하는 명언을 setQuote 함수에 전달한다.
+setQuote 함수를 생성한 다음, 매개변수로는 result를 전달받아 quoteElement에 textContent로 "result" 를 할당한다.
+이렇게 코드를 작성하고 웹페이지에서 새로고침을 눌러주면, 지금은 새로고침을 할 때마다 명언이 변경되는 것을 볼 수 있다.
+
+하루에 한 개의 명언만 볼 수 있고, 날짜가 변경 될 때마다 다른 명언을 볼 수 있게 하기 위해, 명언을 로컬스토리지에 저장해 동일한 날짜라면, 명언 api를 호출하지 않고 로컬스토리지에 저장되어있는 명언을 가져오는 코드를 작성해본다.
+동일한 날짜에는 이미 저장되어있는 명언을 가져와야하기 때문에, 오늘의 날짜를 구하기 위해 전역변수로 nowDate 변수를 생성한 다음, Date 객체를 생성하고, month와 date에 현재 월과 일을 구해준다.
+로컬스토리지에 저장할 객체의 프로퍼티로는 생성날짜인 createDate와 명언인 quoteData를 설정해주고, 이 객체를 setQuote 함수의 내부에 quote라는 변수에 넣어준다. 그 다음, 로컬스토리지에 setItem을 사용해 quote라는 키값으로 객체인 quote 변수를 JSON.stringify로 문자열로 변환한 다음 저장한다.
+
+마지막으로, 이 웹 페이지에 접속했을 때, 로컬스토리지에 quote라는 키값의 데이터가 있고, 데이터의 createDate값이 오늘의 날짜와 동일하다면, getQuote 함수를 호출하지 않고, 그렇지 않을 경우에만 getQuote 함수를 호출하는 코드를 작성한다. 
+먼저 quote.js의 가장 윗쪽에 quoteItem 이라는 변수를 생성하고, 이 변수에 getItem 메서드를 사용해서 key값이 quote인 데이터를 찾아 할당해준 다음, quote.js의 가장 아래쪽에는 조건문을 사용해 quoteItem이 있을 때와 없을 때를 구분해주고, quoteItem이 있다면, JSON.parse로 JSON 문자열인 quoteItme을 객체로 변환하고, 그 값을 구조분해 할당을 사용해 createDate와 quoteData 값을 가져와서 만약 createDate가 오늘의 날짜와 동일하다면, quoteElement에 textContent로 로컬스토리지에 저장되어있는 명언 데이터인 quoteData를 설정해주고, 그게 아니라면 getQuote 함수를 호출해준다.
+
+코드를 저장하고, go live 버튼을 눌러 코드를 실행하면, 애플리케이션 탭에 로컬스토리지를 열어보면, quote라는 키값에 데이터가 알맞게 저장되어있고, 새로고침을 눌러봐도 명언이 변경되지 않는 것을 볼 수 있다.
+
+명언 요소에 스타일을 적용한다.
+
+- main.css
+...
+
+/* 명언 */
+.quote {
+    font-size: var(--small);
+    position: fixed;
+    bottom: 0;
+    max-width: 800px;
+    padding: 0 10px;
+    margin-bottom: 20px;
+    font-weight: 300;
+	text-align: center;
+}
+
+class이름이 quote인 요소에 글자 크기는 small로 설정해주고, 아래에 고정해주기 위해 position fixed와 bottom 0 을 설정해주고, max-width는 800px로, padding은 양옆 10px로 설정한다. margin-bottom을 사용해 20px 정도 띄워주고, 글자의 굵기는 300으로 설정하고 가운데 정렬을 해주면, 스타일이 잘 적용되어 명언이 화면의 가장 아래쪽에 고정되어있는 것을 확인할 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
