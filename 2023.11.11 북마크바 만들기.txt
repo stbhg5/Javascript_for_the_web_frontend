@@ -1,0 +1,279 @@
+[2023.11.11 북마크바 만들기]
+
+
+4. 북마크 바 만들기
+북마크 탭은 열고 닫을 수 있고, 북마크를 추가하는 버튼과 추가한 북마크들을 볼 수 있는 탭이다.
+
+index.html에서 class 이름이 main-container인 div 아래에 class이름과 id가 bookmark-open인 div와 class이름과 id가 bookmark-close인 div를 만들고, 각각의 div 안에는 id가 bookmark-open-btn인 div와 bookmark-close-btn인 div를 넣어주고, 텍스트로는 북마크 닫기, 북마크 열기를 작성한다.
+그리고 그 아래에는 bookmark-bar라는 class 와 id 를 갖는 div를 만들어주고 주석으로 "북마크 바" 라고 작성한다. 그 다음 bookmark-toggle.js 파일을 만들고 html 문서에 추가한다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>newtab</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="./css/main.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="main-container">
+            <div class="main-wrapper">
+                <div class="today-info">
+                    <div class="date" id="date">
+                        <!-- 날짜&요일 -->
+                    </div>
+                    <div class="time" id="time">
+                        <!-- 현재 시간 -->
+                    </div>
+                </div>
+                <div class="search">
+                    <input id="search-input" placeholder="검색어를 입력하세요" autocomplete="off"/>
+                </div>
+            </div>
+            <div class="quote" id="quote">
+                <!-- 명언 -->
+            </div>
+        </div>
+
+        <div class="bookmark-open" id="bookmark-open">
+            <div id="bookmark-open-btn">북마크 닫기</div>
+        </div>
+        <div class="bookmark-close" id="bookmark-close">
+            <div id="bookmark-close-btn">북마크 열기</div>
+        </div>
+    
+        <div class="bookmark-bar" id="bookmark-bar">
+            <!-- 북마크 바 -->
+        </div>
+
+		<script src="./js/clock.js"></script>
+        <script src="./js/search.js"></script>
+        <script src="./js/quote.js"></script>
+        <script src="./js/bookmark-toggle.js"></script>
+    </body>
+    
+</html>
+
+bookmark-open은 북마크 바가 열린 상태를 뜻하고, bookmark-close는 북마크 바가 닫힌 상태를 뜻하며 bookmark-bar는 말 그대로 북마크 바를 뜻한다.
+북마크바에 스타일을 적용한다.
+
+- main.css
+...
+
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    position: relative;
+}
+
+.main-container .main-wrapper {
+    text-align: center;
+    position: fixed;
+}
+
+...
+
+/* 북마크바 */
+.bookmark-open {
+    width: 240px;
+    padding: 15px 30px;
+    font-size: var(--xsmall);
+    height: 20px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: flex-end;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.bookmark-close {
+    width: 240px;
+    padding: 15px 30px;
+    font-size: var(--xsmall);
+    height: 20px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: flex-end;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.bookmark-open div {
+    cursor: pointer;
+}
+
+.bookmark-close div {
+    cursor: pointer;
+}
+
+.bookmark-bar {
+    width: 240px;
+    position: absolute;
+    top: 50px;
+    right: 0px;
+    min-height: calc(100vh - 70px);
+    padding: 10px 30px;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+bookmark-open 의 스타일은 가로 길이를 240px로 설정해주고 padding은 위아래로 15px, 양옆으로는 30px, 글자 크기를 xsmall로 설정해주고 이 요소의 높이는 20px로 설정한다. 북마크를 열고 닫는 버튼은 오른쪽 상단에 위치해야하고, 이 북마크 바는 class이름이 main-container인 요소의 위에 떠있어야 하므로, main-container에는 position relative를, bookmark-open 요소에는 position absolute와 top 0, right 0px 으로 설정한다. 화면의 가운데에 있는 시계는 북마크 바와 상관 없이 고정되어 있어야 하므로 position fixed를 주고, "북마크 닫기" 글자를 오른쪽 끝에 두기 위해 display flex, justify-content flex-end로 설정한다.
+class 이름이 bookmark-close인 요소도 bookmark-open과 동일한 스타일을 적용해주고 이 요소들의 안에 있는, 실제 버튼 역할을 할 요소들에는 커서 모양을 포인터로 설정한다.
+북마크 바 요소는 동일하게 가로 길이를 240px로, position absolute, top 50px, right 0px로, 그리고 padding은 위아래 10px, 양옆 30px로 주고, 글자 색상은 흰색으로 배경색은 북마크바를 열고 닫을 때와 동일하게 설정해주고, 이 요소의 높이는 100vh에서 70px을 뺀 값으로 설정한다.
+이렇게 스타일을 설정해주면, 알맞게 적용되어 원하는 위치에 북마크 바가 배치되었다.
+
+- bookmark-toggle.js
+const bookmarkBar = document.getElementById("bookmark-bar");
+const bookMarkOpen = document.getElementById("bookmark-open");
+const bookMarkClose = document.getElementById("bookmark-close");
+
+// 북마크 바 toggle - 북마크 바 열고 닫기
+const bookmarkBarToggle = () => {
+    let isBookMarkBarOpen = localStorage.getItem("isBookMarkBarOpen");
+    if (isBookMarkBarOpen) {
+        if (isBookMarkBarOpen === "open") {
+            localStorage.setItem("isBookMarkBarOpen", "close");
+            bookmarkBar.style.display = "none";
+            bookMarkOpen.style.display = "none";
+            bookMarkClose.style.display = "flex";
+        } else {
+            localStorage.setItem("isBookMarkBarOpen", "open");
+            bookmarkBar.style.display = "block";
+            bookMarkOpen.style.display = "flex";
+            bookMarkClose.style.display = "none";
+        }
+    } else {
+        localStorage.setItem("isBookMarkBarOpen", "close");
+        bookmarkBar.style.display = "none";
+        bookMarkOpen.style.display = "none";
+        bookMarkClose.style.display = "flex";
+    }
+};
+
+document.getElementById("bookmark-open-btn").addEventListener("click", bookmarkBarToggle);
+document.getElementById("bookmark-close-btn").addEventListener("click", bookmarkBarToggle);
+
+id값이 bookmark-bar와 bookmark-open, bookmark-close 인 요소를 getElementById를 통해 가져오고, bookmarkBarToggle 이라는 함수를 생성해서, "북마크 닫기" 와 "북마크 열기" 버튼을 눌렀을 때 북마크 바를 열고 닫는 기능을 개발한다. 이 북마크바를 닫은 상태에서 웹 페이지를 종료했다면, 다음에 재 접속 했을 때에도 북마크바를 닫아야하고, 북마크바를 연 상태에서 웹 페이지를 종료했다면, 동일하게 다음에 재 접속 했을 때 북마크바를 연 상태로 유지하고 있어야하기 때문에 이 북마크바가 열렸는지 닫혔는지에 대한 정보를 로컬스토리지에 저장해준다.
+
+bookmarkBarToggle 함수 안에 isBookMarkBarOpen 이라는 변수를 생성하고, localStorage에 isBookMarkBarOpen이라는 키를 갖는 데이터를 getItem 메서드를 사용해 가져온다. 북마크바는 열고 닫는 두 가지의 상황으로 나눌 수 있고, 북마크바를 여는 상황은, 변수 isBookMarkOpen 의 값이 close일 때이고, 북마크 바를 닫는 상황은 isBookMarkOpen의 값이 open일 때와, 로컬스토리지에 isBookMarkOpen 값이 존재하지 않을 때 이다. 조건문으로 작성해보면, 만약 isBookMarkOpen 값이 존재할 때와 존재하지 않을 때로 구분하고, isBookMarkOpen의 값이 open 일 때와 close 일 때로 나눌 수 있다. isBookMarkOpen 값이 open 일 때 버튼을 눌러, bookmarkBarToggle 함수를 실행했다면, 북마크 바를 닫아야하므로, 로컬스토리지에 setItem 메서드를 통해 값을 close로 변경해주고, bookmarkBar와 bookMarkOpen 요소의 스타일을 display none으로, bookMarkClose는 display flex로 설정한다. isBookMarkOpen 값이 close라면, 로컬스토리지에 setItem 메서드를 통해 값을 open으로 변경해주고, bookmarkBar 의 display는 block으로,  bookMarkOpen 은 flex 로, bookMarkClose 는 none으로 설정한다. 로컬스토리지에 isBookMarkOpen 값이 존재하지 않을 때에는 북마크 바를 닫아야하기 때문에, 위에 작성했던 isBookMarkOpen 값이 open일 때와 동일한 코드를 작성한다.
+그리고 맨 아래 쪽에 버튼 요소를 getElementById를 통해 가져오고 addEventListener를 사용해서 버튼이 클릭 되었을 때, bookmarkBarToggle 함수를 실행시켜 준다.
+이렇게 작성하고, 북마크 바 닫기 버튼을 누르면 북마크 바가 닫히고, 북마크 바 열기를 누르면 북마크 바가 열리는 것을 확인할 수 있다. 하지만 지금 작성된 코드를 보면, 조건문이 많기 때문에 코드가 복잡해보인다.
+
+- bookmark-toggle.js
+const bookmarkBar = document.getElementById("bookmark-bar");
+const bookMarkOpen = document.getElementById("bookmark-open");
+const bookMarkClose = document.getElementById("bookmark-close");
+
+// 북마크 바 toggle - 북마크 바 열고 닫기
+const bookmarkBarToggle = () => {
+    let isBookMarkBarOpen = localStorage.getItem("isBookMarkBarOpen");
+    if (isBookMarkBarOpen === "close") {
+        localStorage.setItem("isBookMarkBarOpen", "open");
+        bookmarkBar.style.display = "block";
+        bookMarkOpen.style.display = "flex";
+        bookMarkClose.style.display = "none";
+        return;
+    }
+    localStorage.setItem("isBookMarkBarOpen", "close");
+    bookmarkBar.style.display = "none";
+    bookMarkOpen.style.display = "none";
+    bookMarkClose.style.display = "flex";
+};
+
+document.getElementById("bookmark-open-btn").addEventListener("click", bookmarkBarToggle);
+document.getElementById("bookmark-close-btn").addEventListener("click", bookmarkBarToggle);
+
+많은 조건식 때문에 복잡하게 작성된 코드는 얼리 리턴 패턴을 적용해 깔끔하게 작성할 수 있다. 로컬 스토리지에 isBookMarkOpen 데이터가 close일 경우에만 북마크 바를 열고, 나머지의 경우에는 모두 북마크 바를 닫으면 되기 때문에  isBookMarkOpen 값이 close일 경우에만 북마크 바를 열고, 리턴을 해준 다음, 아래에 북마크 바를 닫는 기능의 코드를 작성해주면 훨씬 깔끔한 코드로 작성할 수 있다.
+이제 웹 페이지에 접속 했을 때, 로컬스토리지에 isBookMarkBarOpen 변수의 값이 close 라면 북마크바를 닫힌 상태로 만들고, 값이 open이라면 북마크바를 표시해주는 기능의 코드를 작성한다.
+
+- bookmark-toggle.js
+const bookmarkBar = document.getElementById("bookmark-bar");
+const bookMarkOpen = document.getElementById("bookmark-open");
+const bookMarkClose = document.getElementById("bookmark-close");
+
+// 웹 페이지 접속시 북마크 바 설정
+const isBookMarkBarOpen = localStorage.getItem("isBookMarkBarOpen");
+if (isBookMarkBarOpen === "close") {
+    // localstorage에 isBookMarkBarOpen이 close라면
+    bookmarkBar.style.display = "none";
+    bookMarkOpen.style.display = "none";
+    bookMarkClose.style.display = "flex";
+} else {
+    // localstorage에 isBookMarkBarOpen이 open이라면
+    bookmarkBar.style.display = "block";
+    bookMarkOpen.style.display = "flex";
+    bookMarkClose.style.display = "none";
+}
+
+// 북마크 바 toggle - 북마크 바 열고 닫기
+const bookmarkBarToggle = () => {
+
+    let isBookMarkBarOpen = localStorage.getItem("isBookMarkBarOpen");
+    
+    if (isBookMarkBarOpen === "close") { // 북마크 바 열기
+        localStorage.setItem("isBookMarkBarOpen", "open");
+        bookmarkBar.style.display = "block";
+        bookMarkOpen.style.display = "flex";
+        bookMarkClose.style.display = "none";
+        return;
+    }
+
+    // 북마크 바 닫기
+    localStorage.setItem("isBookMarkBarOpen", "close");
+    bookmarkBar.style.display = "none";
+    bookMarkOpen.style.display = "none";
+    bookMarkClose.style.display = "flex";
+
+};
+
+document.getElementById("bookmark-open-btn").addEventListener("click", bookmarkBarToggle);
+document.getElementById("bookmark-close-btn").addEventListener("click", bookmarkBarToggle);
+
+isBookMarkBarOpen 변수에 getItem 메서드로 로컬스토리지의 isBookMarkBarOpen 값을 가져오고, 만약 isBookMarkBarOpen값이 close라면 이 북마크 바의 요소들을 display none으로 없애주고, "북마크 닫기" 버튼을 표시해준다. isBookMarkBarOpen값이 open이라면 북마크 바 요소들을 모두 표시해준다.
+북마크 바를 닫은 상태에서 웹 페이지를 종료하고, 다시 웹 페이지를 실행해보면, 북마크 바가 닫힌 상태로 켜지는 것을 볼 수 있다.
+
+- main.css
+...
+
+.bookmark-close {
+    width: 240px;
+    padding: 15px 30px;
+    font-size: var(--xsmall);
+    height: 20px;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    display: flex;
+    justify-content: flex-end;
+    color: white;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+}
+
+...
+
+css 파일 main.css에 가서, 북마크 바가 닫혀있을 경우에 이 표시된 배경색을 삭제해주면 북마크 바가 실제로 열리고 닫힌 것처럼 표시된다.
+
+지금까지 생성한 자바스크립트 파일은 총 4개이고, 현재 각각의 자바스크립트 파일에서 전역에 선언된 변수들이 상당히 많이 보이는데, 자바스크립트에서 전역으로 선언된 변수 혹은 함수는 전역 스코프를 갖기 때문에 다른 자바스크립트 파일에서도 사용할 수 있게 된다. seach.js 파일에서 timeElement 요소의 텍스트를 textContent를 사용해서 12:00로 변경하고 저장하면, 실제로 시간이 12:00로 변하는 것을 알 수 있다.
+이를 방지하기 위해 즉시실행함수를 사용한다.
+
+(function () {
+    console.log("자바스크립트");
+})();
+
+즉시실행함수는, 다른말로는 IIFE 함수로, 함수의 호출문을 작성하지 않고도 바로, 선언되자마자 즉시 실행되는 함수이다.
+이 즉시실행함수 안에 작성했던 코드들을 넣게 되면, 함수가 즉시 실행되기 때문에 코드를 바로 실행할 수 있고, 함수 내부에 작성된 전역변수들은, 함수 내부에 선언되어있기 때문에 함수 스코프를 갖게 되어, 다른 자바스크립트 파일에서 접근 할 수 없어 여러가지 오류들을 방지할 수 있다. timeElement의 텍스트를 변경하는 코드도 즉시실행함수 내부에 작성하면, 에러가 발생하는 것을 볼 수 있다.
+지금까지 작성한 자바스크립트 파일의 코드들을 즉시실행함수 내부에 작성한다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
