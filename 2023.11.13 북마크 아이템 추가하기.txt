@@ -1,0 +1,619 @@
+[2023.11.13 북마크 아이템 추가하기]
+
+
+5. 북마크 아이템 추가하기
+북마크 바에 여러 아이템을 추가해보고 추가한 아이템 리스트들을 표시하고 또 삭제하는 기능을 구현해본다.
+
+- index.html
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>newtab</title>
+        <meta charset="UTF-8"/>
+        <link rel="stylesheet" href="./css/main.css"/>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400&display=swap" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="main-container">
+            <div class="main-wrapper">
+                <div class="today-info">
+                    <div class="date" id="date">
+                        <!-- 날짜&요일 -->
+                    </div>
+                    <div class="time" id="time">
+                        <!-- 현재 시간 -->
+                    </div>
+                </div>
+                <div class="search">
+                    <input id="search-input" placeholder="검색어를 입력하세요" autocomplete="off"/>
+                </div>
+            </div>
+            <div class="quote" id="quote">
+                <!-- 명언 -->
+            </div>
+        </div>
+
+        <div class="bookmark-open" id="bookmark-open">
+            <div id="bookmark-open-btn">북마크 닫기</div>
+        </div>
+        <div class="bookmark-close" id="bookmark-close">
+            <div id="bookmark-close-btn">북마크 열기</div>
+        </div>
+    
+        <div class="bookmark-bar" id="bookmark-bar">
+            <!-- 북마크 바 -->
+            <div class="bookmark-item-add-btn" id="bookmark-item-add-btn">
+                + 북마크 추가
+            </div>
+            <!-- 새로운 북마크 작성폼 -->
+            <div class="bookmark-item-input-form" id="bookmark-item-input-form">
+                <div class="bookmark-input">
+                    <div class="new-bookmark-name">
+                        <div class="label">이름</div>
+                        <input id="new-bookmark-name-input"/>
+                    </div>
+                    <div class="new-bookmark-url">
+                        <div class="label">주소</div>
+                        <input id="new-bookmark-url-input"/>
+                    </div>
+                </div>
+                <div class="bookmark-item-input-btn">
+                    <div class="cancel-btn" id="cancel-btn">취소</div>
+                    <div class="add-btn" id="add-btn">추가</div>
+                </div>
+            </div>
+        </div>
+
+		<script src="./js/clock.js"></script>
+        <script src="./js/search.js"></script>
+        <script src="./js/quote.js"></script>
+        <script src="./js/bookmark-toggle.js"></script>
+        <script src="./js/bookmark.js"></script>
+    </body>
+    
+</html>
+
+index.html에서 class이름이 bookmark-bar인 요소 안에 class이름과 id값이 bookmark-item-add-btn인 div를 작성하고, 그 아래에는 새로운 북마크를 추가할 수 있는 입력폼과 추가버튼을 만들어준다. class 이름과 id 값이 bookmark-item-input-form인 div 안에 class 이름이 bookmark-input인 div를 만들고, 그 안에는 새로운 북마크의 이름과 주소를 넣을 수 있는 input 폼들을 class 이름이 new-bookmark-name과 new-bookmark-url인 div안에 만들어준다. 안에는 label과 input 폼을 적어주고, input 폼에는 id 값을 new-bookmark-name-input과 new-bookmark-url-input으로 설정하고, bookmark-input 요소의 아래에는 bookmark-item-input-btn이라는 이름의 class를 갖는 div 안에 취소 버튼과 추가 버튼을 넣어준다. 그 다음, bookmark.js 파일을 만들고 body 태그의 가장 아래에 스크립트를 추가한다.
+
+- bookmark.js
+const newBookmarkForm = document.getElementById("bookmark-item-input-form");
+
+// 북마크 리스트 초기 설정
+let bookmarkList = [];
+// if (localStorage.getItem("bookmarkList")) {
+//     bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+// } else {
+//     localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+// }
+localStorage.getItem("bookmarkList") ? (bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"))) : localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+
+// 북마크 아이템 추가 버튼 초기 설정
+let isAddBtnClick = false;
+newBookmarkForm.style.display = "none";
+
+// 북마크 아이템 추가 버튼 Toggle
+const newBookmarkToggle = () => {
+    isAddBtnClick = !isAddBtnClick; // 기존값과 바꿈
+    isAddBtnClick ? (newBookmarkForm.style.display = "block") : (newBookmarkForm.style.display = "none");
+};
+
+document.getElementById("bookmark-item-add-btn").addEventListener("click", newBookmarkToggle);
+
+getElementById를 사용해 id가 bookmark-item-input-form인 요소를 newBookmarkForm에 담아준다.
+한 번 추가한 북마크는 다음에 웹 사이트에 재 접속 했을 때 추가된 상태여야하기 때문에 이 북마크 아이템들을 로컬스토리지에 저장해주어야 한다. bookmarkList 라는 변수를 생성하고 빈 배열로 초기화 해준 다음, 만약 로컬스토리지에 bookmarkList 가 있다면, bookmarkList 변수에 로컬스토리지에 저장되어있는 값을 넣어주고, 그렇지 않다면 로컬스토리지에 빈 배열을 setItem으로 넣어준다.
+그리고 이 북마크 추가 버튼을 눌러야만, 아래에 있는 입력폼들을 나타내주기 위해, isAddBtnClick 이라는 변수를 false로 초기화해주고, newBookmarkForm 요소를 display none 으로 변경한다.
+newBookmarkToggle 함수를 생성해 isAddBtnClick 값을 NOT 연산자로 바꿔주고, 만약 isAddBtnClick 변수가 true라면 북마크 입력폼을 display block 해주고, false라면 display none 해준다.
+bookmakr-item-add-btn을 눌렀을 때 newBookmarkToggle함수가 실행되어야하므로, 가장 아래에 addEventListener로 버튼이 클릭되었을 때 해당 함수를 실행시켜준다.
+
+이렇게 코드를 작성하고 화면에서 북마크 추가 버튼을 눌러보면, 한 번 눌렀을 때에는 입력폼들이 나오고, 다시 북마크 추가 버튼을 누르면 입력폼이 사라지게 된다.
+
+다음으로는 실제 이 북마크 아이템을 추가해본다.
+
+- bookmark.js
+const newBookmarkForm = document.getElementById("bookmark-item-input-form");
+
+// 북마크 리스트 초기 설정
+let bookmarkList = [];
+// if (localStorage.getItem("bookmarkList")) {
+//     bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+// } else {
+//     localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+// }
+localStorage.getItem("bookmarkList") ? (bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"))) : localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+
+// 북마크 아이템 추가 버튼 초기 설정
+let isAddBtnClick = false;
+newBookmarkForm.style.display = "none";
+
+// 북마크 아이템 추가 버튼 Toggle
+const newBookmarkToggle = () => {
+    isAddBtnClick = !isAddBtnClick; // 기존값과 바꿈
+    isAddBtnClick ? (newBookmarkForm.style.display = "block") : (newBookmarkForm.style.display = "none");
+};
+
+// 북마크 아이템 추가
+const addBookmarkItem = () => {
+    let bookmarkList = [];
+    if (localStorage.getItem("bookmarkList")) {
+        bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+    }
+    let name = document.getElementById("new-bookmark-name-input").value;
+    let url = document.getElementById("new-bookmark-url-input").value;
+    let createAt = Date.now();
+    bookmarkList.push({ name: name, url: url, createAt: createAt });
+    localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+    document.getElementById("new-bookmark-name-input").value = "";
+    document.getElementById("new-bookmark-url-input").value = "";
+    newBookmarkToggle();
+};
+
+document.getElementById("bookmark-item-add-btn").addEventListener("click", newBookmarkToggle);
+document.getElementById("add-btn").addEventListener("click", addBookmarkItem);
+document.getElementById("cancel-btn").addEventListener("click", newBookmarkToggle);
+
+addBookmarkItem 함수를 만들고 bookmarkList 변수를 빈 배열로 초기화해준 다음, 만약 로컬스토리지에 bookmarkList가 있다면, bookmarkList 변수에 로컬스토리지에 있는 데이터를 넣어주도록 한다. 그 다음 name 변수에는 id가 new-bookmark-name-input인 input의 value를, url 에는 id 가 new-bookmark-url-input인 input의 value값을 넣어주고, createAt 변수에는 현재의 날짜를 Date객체의 now 메서드를 사용해 넣어주도록 한다.
+Date 객체에 now 메서드를 사용하면 1970년 1월 1일 0시 0분 0초부터 현재까지 경과된 밀리초를 나타내는 숫자 값을 얻을 수 있다.
+bookmarkList에 push 메서드로 name에는 name을, url에는 url을, 그리고 createAt에는 createAt 변수를 객체형태로 넣어주고, 이 값을 로컬스토리지에 setItem을 사용해서 데이터를 저장한다. 로컬 스토리지에 북마크 리스트를 저장해준 다음, 인풋폼에 입력된 값을 빈 문자열로 초기화해주고 newBookmarkToggle 함수를 실행해, 새로운 북마크의 정보를 입력하는 폼을 닫아준다.
+파일의 가장 아래에 아이디가 add-btn인 북마크 아이템을 추가하는 버튼을 눌렀을 때 addBookmarkItem 함수를 실행시켜 준다. 그리고 취소 버튼을 눌렀을 때에는 다시 북마크 정보를 입력하는 폼을 닫아준다.
+
+여기까지 작성하고, 화면에 “북마크 추가” 버튼을 눌러, 이름에는 네이버, 링크에는 https://www.naver.com을 작성해 추가 버튼을 누르면, 애플리케이션 탭의 로컬 스토리지에 key 값이 bookmarkList인 데이터가 저장되어있는 것을 볼 수 있다. 여기서 이름에는 구글, 링크에는 https://www.google.com을 작성해 북마크 아이템 하나를 더 추가해보면, 애플리케이션 탭에 두 개의 북마크 아이템이 저장되어있는 것을 볼 수 있다.
+
+이제 로컬 스토리지에 저장된 북마크 아이템들을 북마크 바에 나타내주도록 한다.
+
+- index.html
+...
+
+<div class="bookmark-bar" id="bookmark-bar">
+    <!-- 북마크 바 -->
+    <div class="bookmark-item-add-btn" id="bookmark-item-add-btn">
+        + 북마크 추가
+    </div>
+    <!-- 새로운 북마크 작성폼 -->
+    <div class="bookmark-item-input-form" id="bookmark-item-input-form">
+        <div class="bookmark-input">
+            <div class="new-bookmark-name">
+                <div class="label">이름</div>
+                <input id="new-bookmark-name-input"/>
+            </div>
+            <div class="new-bookmark-url">
+                <div class="label">주소</div>
+                <input id="new-bookmark-url-input"/>
+            </div>
+        </div>
+        <div class="bookmark-item-input-btn">
+            <div class="cancel-btn" id="cancel-btn">취소</div>
+            <div class="add-btn" id="add-btn">추가</div>
+        </div>
+    </div>
+    <!-- 북마크 리스트 -->
+    <div class="bookmark-list" id="bookmark-list"></div>
+</div>
+
+...
+
+index.html 파일에서 class 이름이 bookmark-bar 인 div의 가장 아래에 class이름과 id값이 bookmark-list인 요소를 추가해준다.
+
+- bookmark.js
+const newBookmarkForm = document.getElementById("bookmark-item-input-form");
+
+// 북마크 리스트 초기 설정
+let bookmarkList = [];
+// if (localStorage.getItem("bookmarkList")) {
+//     bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+// } else {
+//     localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+// }
+localStorage.getItem("bookmarkList") ? (bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"))) : localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+
+// 북마크 아이템 추가 버튼 초기 설정
+let isAddBtnClick = false;
+newBookmarkForm.style.display = "none";
+
+// 북마크 아이템 추가 버튼 Toggle
+const newBookmarkToggle = () => {
+    isAddBtnClick = !isAddBtnClick; // 기존값과 바꿈
+    isAddBtnClick ? (newBookmarkForm.style.display = "block") : (newBookmarkForm.style.display = "none");
+};
+
+// 북마크 아이템 나타내기
+const setBookmarkItem = (item) => {
+   console.log(item);
+};
+
+// 북마크 리스트 요소 꺼내기
+const setBookmarkList = () => {
+    bookmarkList.forEach((item) => {
+        // console.log(item);
+        setBookmarkItem(item);
+    });
+};
+
+// 북마크 아이템 추가
+const addBookmarkItem = () => {
+    let bookmarkList = [];
+    if (localStorage.getItem("bookmarkList")) {
+        bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+    }
+    let name = document.getElementById("new-bookmark-name-input").value;
+    let url = document.getElementById("new-bookmark-url-input").value;
+    let createAt = Date.now();
+    bookmarkList.push({ name: name, url: url, createAt: createAt });
+    localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+    document.getElementById("new-bookmark-name-input").value = "";
+    document.getElementById("new-bookmark-url-input").value = "";
+    setBookmarkItem({ name: name, url: url, createAt: createAt });
+    newBookmarkToggle();
+};
+
+document.getElementById("bookmark-item-add-btn").addEventListener("click", newBookmarkToggle);
+document.getElementById("add-btn").addEventListener("click", addBookmarkItem);
+document.getElementById("cancel-btn").addEventListener("click", newBookmarkToggle);
+setBookmarkList();
+
+bookmarkItemList 라는 변수에 class 이름이 bookmark-list인 요소를 getElementById를 통해 가져온다.
+그 다음 newBookmarkToggle 함수 아래에 로컬 스토리지에 저장된 북마크 아이템들을 꺼내서 나타내주는 setBookmarkList 함수를 만들어 전역 변수로 선언된 bookmarkList 배열의 요소들을, 배열 내장함수인 forEach를 사용해 하나씩 꺼내준 뒤, setBookmarkItem 함수에 인수로 item을 전달한다.
+setBookmarkList 함수의 위에 setBookmarkItem 이라는 함수를 생성한다. setBookmarkList 함수는 로컬스토리지에 있는 북마크 아이템 리스트를 꺼내온 다음, 북마크 바에 나타내는 기능을 하는 함수이기 때문에, 북마크 아이템이 추가될 때마다, 그리고 웹 페이지에 접속 할 때 호출되어야 하므로, addBookmarkItem 함수 안에는 setBookmarkItem 함수를, bookmark.js 파일의 아래쪽에는 setBookmarkList 함수를 호출한다.
+
+코드를 작성하고 저장해보면, 콘솔탭에 추가했던 북마크 아이템인 네이버와 구글 데이터가 출력된다.
+
+이 출력된 item 들을 setBookmarkItem 함수에서 웹 페이지에 나타내주도록 한다.
+
+- bookmark.js
+const newBookmarkForm = document.getElementById("bookmark-item-input-form");
+const bookmarkItemList = document.getElementById("bookmark-list");
+
+// 북마크 리스트 초기 설정
+let bookmarkList = [];
+// if (localStorage.getItem("bookmarkList")) {
+//     bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+// } else {
+//     localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+// }
+localStorage.getItem("bookmarkList") ? (bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"))) : localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+
+// 북마크 아이템 추가 버튼 초기 설정
+let isAddBtnClick = false;
+newBookmarkForm.style.display = "none";
+
+// 북마크 아이템 추가 버튼 Toggle
+const newBookmarkToggle = () => {
+    isAddBtnClick = !isAddBtnClick; // 기존값과 바꿈
+    isAddBtnClick ? (newBookmarkForm.style.display = "block") : (newBookmarkForm.style.display = "none");
+};
+
+// 북마크 아이템 나타내기
+const setBookmarkItem = (item) => {
+    // console.log(item);
+
+    // 요소 추가
+    const bookmarkItem = document.createElement("div");
+    bookmarkItem.classList.add("bookmark-item");
+    bookmarkItem.id = `bookmark-item-${item.createAt}`;
+
+    const bookmarkInfo = document.createElement("div");
+    bookmarkInfo.classList.add("bookmark-info");
+
+    const bookmarkUrl = document.createElement("a");
+    bookmarkUrl.classList.add("bookmark-url");
+
+    const urlIcon = document.createElement("div");
+    urlIcon.classList.add("url-icon");
+
+    const urlIconImg = document.createElement("img");
+
+    const nameElement = document.createElement("div");
+    nameElement.classList.add("url-name");
+
+    const bookmarkDelBtn = document.createElement("div");
+    bookmarkDelBtn.classList.add("del-btn");
+    bookmarkDelBtn.textContent = "삭제";
+    bookmarkDelBtn.addEventListener("click", () => {
+        deleteBookmarkItem(item.createAt);
+    });
+
+    // 요소 설정
+    bookmarkUrl.href = item.url; // 북마크 url 설정
+    urlIconImg.src = `https://www.google.com/s2/favicons?domain_url=${item.url}`; // 해당 북마크 페이지에 알맞은 아이콘 가져옴
+    nameElement.textContent = item.name; // 북마크 이름 설정
+
+    // 자식 요소 추가
+    bookmarkItem.appendChild(bookmarkInfo);
+    bookmarkItem.appendChild(bookmarkDelBtn);
+    bookmarkInfo.appendChild(bookmarkUrl);
+    bookmarkUrl.appendChild(urlIcon);
+    bookmarkUrl.appendChild(nameElement);
+    urlIcon.appendChild(urlIconImg);
+
+    bookmarkItemList.appendChild(bookmarkItem);
+};
+
+// 북마크 리스트 요소 꺼내기
+const setBookmarkList = () => {
+    bookmarkList.forEach((item) => {
+        // console.log(item);
+        setBookmarkItem(item);
+    });
+};
+
+// 북마크 아이템 추가
+const addBookmarkItem = () => {
+    let bookmarkList = [];
+    if (localStorage.getItem("bookmarkList")) {
+        bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+    }
+    let name = document.getElementById("new-bookmark-name-input").value;
+    let url = document.getElementById("new-bookmark-url-input").value;
+    let createAt = Date.now();
+    bookmarkList.push({ name: name, url: url, createAt: createAt });
+    localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+    document.getElementById("new-bookmark-name-input").value = "";
+    document.getElementById("new-bookmark-url-input").value = "";
+    setBookmarkItem({ name: name, url: url, createAt: createAt });
+    newBookmarkToggle();
+};
+
+document.getElementById("bookmark-item-add-btn").addEventListener("click", newBookmarkToggle);
+document.getElementById("add-btn").addEventListener("click", addBookmarkItem);
+document.getElementById("cancel-btn").addEventListener("click", newBookmarkToggle);
+setBookmarkList();
+
+북마크 아이템 요소는 크게 bookmark-item, bookamark-info, del-btn 으로 이루어져있고, bookmark-info 요소 안에는 아이콘과 북마크 아이템의 이름으로 이루어져 있다. 북마크 아이템의 이름은 a 태그로 감싼 다음, 북마크 아이템 객체의 url 값으로 이동시켜준다.
+이제 북마크 아이템들을 요소 노드들로 추가해주고, bookmarkItemList 요소의 자식요소로 추가해본다.
+bookmarkItem 이라는 변수에 createElement를 사용해 div로 이루어져있는 요소를 생성해준다. 생성한 요소의 class 이름은 bookmark-item으로 설정하고, id 값은, bookmark-item- 뒤에 생성한 시간을 나타내는 item 객체에 createAt 값을 넣어준다. 북마크 아이콘과 이름을 나타내는 div를, bookmarkInfo라는 변수로 생성해주고, class 이름은 bookmark-info으로 설정해주고, 북마크의 주소를 나타내는 a 태그로 이루어진 요소는, bookmarkUrl 이라는 변수에 생성해주고 class 이름을 bookmark-url로 설정한다. 그리고, 새로운 img 태그를 urlIconImg 변수로 생성해주고, 북마크 아이템의 이름이 적힐 div 요소를 nameElement 이라는 변수로 생성하고, class 이름을 url-name으로 설정한다. bookmark-item은 bookmark-info 와 삭제 버튼으로 이루어져 있기 때문에 bookmarkDelBtn 이라는 요소를 생성해 삭제 버튼을 만들어주고, class 이름은 del-btn으로 설정한다. a 태그인 bookmarkUrl은, href를 통해 item 객체의 url로 설정해, 클릭했을 때 북마크의 url로 이동하게 해주고, img 태그인 urlIconImg의 src에는 "https://www.googe.com/s2/favicons?domain_url=" 뒤에 item 객체의 url을 넣어 해당 북마크 페이지에 알맞는 아이콘을 가져와준다. 북마크의 이름을 나타내는 nameElement 에는 textContent를 사용해 item 객체의 name 값을 넣어준다. bookmarkItem의 자식요소로는 bookmarkInfo 와 bookmarkDelBtn을, 그리고 bookmarkInfo 요소의 자식요소로는 bookmarkUrl을, bookmarkUrl의 자식요소로는 urlIcon과 nameElement를, 그리고 urlIcon의 자식 요소로는 urlIconImg를 넣어주고, 마지막으로 이 bookmarkItem을 bookmarkItemList의 자식요소로 추가해준다.
+
+북마크 바에 북마크 아이템 요소들이 아이콘, 링크, 이름, 삭제 버튼으로 알맞게 출력되는 것을 확인할 수 있다.
+
+삭제 버튼을 누르면 아이템이 삭제가 되게 개발해준다.
+
+- bookmark.js
+(function() {
+
+    const newBookmarkForm = document.getElementById("bookmark-item-input-form");
+    const bookmarkItemList = document.getElementById("bookmark-list");
+
+    // 북마크 리스트 초기 설정
+    let bookmarkList = [];
+    // if (localStorage.getItem("bookmarkList")) {
+    //     bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+    // } else {
+    //     localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+    // }
+    localStorage.getItem("bookmarkList") ? (bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"))) : localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+
+    // 북마크 아이템 추가 버튼 초기 설정
+    let isAddBtnClick = false;
+    newBookmarkForm.style.display = "none";
+
+    // 북마크 아이템 추가 버튼 Toggle
+    const newBookmarkToggle = () => {
+        isAddBtnClick = !isAddBtnClick; // 기존값과 바꿈
+        isAddBtnClick ? (newBookmarkForm.style.display = "block") : (newBookmarkForm.style.display = "none");
+    };
+
+    // 북마크 아이템 삭제
+    const deleteBookmarkItem = (id) => {
+        const isDelete = window.confirm("정말 삭제하시겠습니까?");
+        if (isDelete) {
+            // 로컬 스토리지에서 삭제
+            let bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+            let nowBookmarkList = bookmarkList.filter((elm) => elm.createAt !== id);
+            localStorage.setItem("bookmarkList", JSON.stringify(nowBookmarkList));
+            // 요소에서 삭제
+            document.getElementById(`bookmark-item-${id}`).remove();
+            return;
+        }
+    };
+
+    // 북마크 아이템 나타내기
+    const setBookmarkItem = (item) => {
+        // console.log(item);
+
+        // 요소 추가
+        const bookmarkItem = document.createElement("div");
+        bookmarkItem.classList.add("bookmark-item");
+        bookmarkItem.id = `bookmark-item-${item.createAt}`;
+
+        const bookmarkInfo = document.createElement("div");
+        bookmarkInfo.classList.add("bookmark-info");
+
+        const bookmarkUrl = document.createElement("a");
+        bookmarkUrl.classList.add("bookmark-url");
+
+        const urlIcon = document.createElement("div");
+        urlIcon.classList.add("url-icon");
+
+        const urlIconImg = document.createElement("img");
+
+        const nameElement = document.createElement("div");
+        nameElement.classList.add("url-name");
+
+        const bookmarkDelBtn = document.createElement("div");
+        bookmarkDelBtn.classList.add("del-btn");
+        bookmarkDelBtn.textContent = "삭제";
+        bookmarkDelBtn.addEventListener("click", () => {
+            deleteBookmarkItem(item.createAt);
+        });
+
+        // 요소 설정
+        bookmarkUrl.href = item.url; // 북마크 url 설정
+        urlIconImg.src = `https://www.google.com/s2/favicons?domain_url=${item.url}`; // 해당 북마크 페이지에 알맞은 아이콘 가져옴
+        nameElement.textContent = item.name; // 북마크 이름 설정
+
+        // 자식 요소 추가
+        bookmarkItem.appendChild(bookmarkInfo);
+        bookmarkItem.appendChild(bookmarkDelBtn);
+        bookmarkInfo.appendChild(bookmarkUrl);
+        bookmarkUrl.appendChild(urlIcon);
+        bookmarkUrl.appendChild(nameElement);
+        urlIcon.appendChild(urlIconImg);
+
+        bookmarkItemList.appendChild(bookmarkItem);
+    };
+
+    // 북마크 리스트 요소 꺼내기
+    const setBookmarkList = () => {
+        bookmarkList.forEach((item) => {
+            // console.log(item);
+            setBookmarkItem(item);
+        });
+    };
+
+    // 북마크 아이템 추가
+    const addBookmarkItem = () => {
+        let bookmarkList = [];
+        if (localStorage.getItem("bookmarkList")) {
+            bookmarkList = JSON.parse(localStorage.getItem("bookmarkList"));
+        }
+        let name = document.getElementById("new-bookmark-name-input").value;
+        let url = document.getElementById("new-bookmark-url-input").value;
+        let createAt = Date.now();
+        bookmarkList.push({ name: name, url: url, createAt: createAt });
+        localStorage.setItem("bookmarkList", JSON.stringify(bookmarkList));
+        document.getElementById("new-bookmark-name-input").value = "";
+        document.getElementById("new-bookmark-url-input").value = "";
+        setBookmarkItem({ name: name, url: url, createAt: createAt });
+        newBookmarkToggle();
+    };
+
+    document.getElementById("bookmark-item-add-btn").addEventListener("click", newBookmarkToggle);
+    document.getElementById("add-btn").addEventListener("click", addBookmarkItem);
+    document.getElementById("cancel-btn").addEventListener("click", newBookmarkToggle);
+    setBookmarkList();
+
+})();
+
+삭제 버튼을 누르면, 해당 북마크 아이템 요소가 북마크 바와, 로컬스토리지에서 삭제되어야 한다.
+먼저 로컬스토리지에서 해당 아이템을 삭제한다. deleteBookmarkItem 이라는 이름의 함수를 생성하고, 함수의 내부에 isDelete 라는 변수를 생성해 window.confirm을 사용해준다.
+window.confirm은 윈도우 객체의 메서드로, confirm 메서드 안에 특정 문장을 넣으면 작성한 문장이 적힌 확인과 취소 버튼이 있는 경고창이 뜨게 된다.
+이 window.confirm 값이 true라면, 정말 삭제 하겠다는 확인 버튼을 누른 것이기 때문에, isDelete의 값이 true라면, 특정 북마크 아이템을 삭제해준다. bookmarkList 변수에 로컬 스토리지에 있는 북마크 아이템을 가져오고, nowBookmarkList 라는 변수에는, bookmarkList 에서 특정 북마크 아이템을 삭제한 북마크 리스트를 담아준다. 배열인 bookmarkList 에 내장함수 filter를 사용해 특정 값을 제외한 나머지 리스트들을 담아줄 수 있다. deleteBookmarkItem 함수에서는, ms 단위로 고유할 수 밖에 없는 값인 createAt 정보를 id 라는 매개변수로 받고, filter의 콜백함수에서는 이 요소들 중 createAt 값이 id값과 동일하지 않는 요소들만 모아서, nowBookmarkList 변수에 새로운 배열로 담아준다. 그 다음, 이 nowBookmarkList 변수에 담긴 값을, 다시 로컬 스토리지에 bookmarkList 값으로 저장해준다.
+이제 북마크 아이템을 북마크 바에서 지워준다. 북마크 아이템 요소의 id값은 setBookmarkItem 함수에서 bookmark-item-${item.createAt} 으로 설정해주었기 때문에, getElementById를 통해 id 값이 bookmark-item-id 인 요소를 찾고, remove 메서드를 사용해 해당 요소를 지워준다.
+deleteBookmarkItem 함수는 bookmarkDelBtn 요소가 클릭되면 실행되어야하기 때문에, bookmarkDelBtn에 addEventListener의 매개변수로 전달해주고, deleteBookmarkItem 함수의 인수로는 고유한 값인, item 객체의 createAt 을 전달해준다.
+
+호이스팅이 일어나는 것을 방지하기 위해 deleteBookmarkItem 함수를 setBookmarkItem 함수 보다 위쪽으로 옮겨주고, 코드를 실행해 삭제 버튼을 눌러보면, 애플리케이션 탭의 로컬 스토리지와 북마크 바의 요소에서 특정 북마크 아이템 값이 삭제되는 것을 볼 수 있다.
+마지막으로 즉시실행함수 내부에 작성한다.
+
+이제 스타일을 수정해주도록 한다.
+
+- main.css
+:root {
+    --xlarge: 170px;
+    --large: 28px;
+    --medium: 18px;
+    --small: 16px;
+    --xsmall: 14px;
+    --xxsmall: 10px;
+}
+
+...
+
+/* 북마크 아이템 추가 버튼 */
+.bookmark-item-add-btn {
+    padding: 10px;  
+    font-size: var(--small);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: rgba(241, 241, 241, 0.2) 0.5px solid;
+    margin-bottom: 35px;
+    margin-top: 10px;
+}
+
+.bookmark-item-add-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* 북마크 아이템 추가 폼 */
+.bookmark-item-input-form {
+    font-size: var(--small);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: rgba(241, 241, 241, 0.2) 0.5px solid;
+    padding: 12px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.bookmark-item-input-form .bookmark-input {
+    margin-bottom: 12px;
+}
+
+.bookmark-item-input-form .bookmark-input .label {
+    margin-bottom: 3px;
+    font-size: var(--xsmall);
+}
+
+.bookmark-item-input-form .bookmark-input input {
+    width: 200px;
+    height: 20px;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.bookmark-item-input-form .bookmark-item-input-btn {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--xsmall);
+    margin-top: 5px;
+}
+
+.bookmark-item-input-btn div {
+    padding: 5px 35px;
+    border-radius: 5px;
+    border: rgba(241, 241, 241, 0.2) 0.5px solid;
+    cursor: pointer;
+}
+
+.bookmark-item-input-btn div:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* 북마크 리스트 */
+.bookmark-list a {
+    color: white;
+    display: flex;
+    text-decoration: none;
+}
+
+.bookmark-list .url-icon {
+    margin-right: 8px;
+}
+
+.url-icon img {
+    vertical-align: middle;
+}
+
+/* 북마크 아이템 */
+.bookmark-list .bookmark-item {
+    font-size: var(--small);
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: rgba(241, 241, 241, 0.2) 0.5px solid;
+    padding: 15px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.bookmark-item .del-btn {
+    color: lightgray;
+    /* vertical-align: middle; */
+    vertical-align: center;
+    font-size: var(--xxsmall);
+    cursor: pointer;
+}
+
+북마크 추가 버튼은 padding을 10px 정도로 주고, 폰트 크기는 small로, 커서는 pointer로 설정해주고, display flex, justify-content center를 설정해 가운데 정렬을 해준다. border-radius는 5px 정도를 줘서 모서리를 살짝 둥글게 해주고, 배경색과 테두리 색은 살짝 밝은 색으로 불투명하게 설정한다. margin은 아래와 위에 각각 35px 10px 정도로 준다. 버튼에 마우스를 올렸을 때 살짝 밝아지는 효과를 주기 위해 hover 될 때 배경색을 살짝 더 불투명하게 해준다.
+북마크 추가 버튼을 눌렀을 때 나오는 북마크 아이템 정보를 입력하는 폼의 스타일을 수정한다. bookmark-item-input-form의 스타일을 설정해준다. 배경색과 border, border-radius, 글자 크기는 위에 설정해줬던 버튼과 동일하게 해주고, padding은 12px로, margin은 위 아래 20px씩 주도록 한다. 북마크의 이름과 주소를 입력하는 bookmark-input 에는 margin-bottom 12px을 주고, class이름이 label인 요소의 스타일은 margin-bottom 3px, 글자 크기는 xsmall로 준다. input 폼은 가로 길이를 200px, 높이를 20px 정도로 하고, border-radius와 padding은 5px 로 설정한다. bookmark-item-input-btn은 display flex를 주고, justify-content space-between을 사용해 자식 요소들을 떨어트려놓고, 글자크기는 xsmall로, margin은 위로 5px 정도로 주도록 한다. bookmark-item-input-btn 안에 있는 div 요소들인 취소 버튼과 추가 버튼에는 padding을 위아래 5px과 양옆  35px, border-radius는 5px, 테두리 색상은 위에 사용했던 값과 동일하게, 그리고 커서는 포인터로 변경해준 다음, 이 버튼들도 마찬가지로 마우스를 올렸을때, hover 시에 색상을 조금 더 불투명하게 해준다.
+북마크 리스트는 이 파랗게 되어있는 a 태그를 흰색으로 변경해주고, display flex 와 text-decoration 을 none을 해준다. icon에는 오른쪽 margin을 8px 정도로 주고, 이미지는 세로 중앙 정렬을 해준다.
+북마크 아이템 요소들은, 배경색과 border, border-radius, 글자 크기를 모두 위에 북마크 추가 버튼과 동일하게 스타일을 적용해주고, padding은 15px, 아래 margin은 15px로 주고, display flex, justify-content space-between을 적용하고 align-items center까지 해서 양옆으로 떨어트려 놓고, 가운데 정렬을 해준다.
+삭제 버튼은 색상을 lightgray로 하고 세로 중앙 정렬을 해주고, 커서를 포인터로 변경한다음, :root에 xxsmall 사이즈를 10px로 추가한 다음, 글자 크기를 xxsmall로 적용해준다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
