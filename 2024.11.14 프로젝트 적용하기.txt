@@ -1,0 +1,52 @@
+[2024.11.14 프로젝트 적용하기]
+
+
+6. 크롬익스텐션 적용하기
+지금까지 개발한 웹 페이지를 크롬 익스텐션으로 적용해서 시작화면으로 사용해본다.
+우선 웹 페이지에 배경색을 입혀주기 위해 css에서 원하는 이미지의 주소를 body에 background-image로 넣어준다.
+
+- main.css
+...
+
+body {
+    margin: 0 auto;
+    width: 100%;
+    font-family: 'Noto Sans KR', sans-serif;
+    /* background-image: url("https://source.unsplash.com/user/hbin12212/likes"); */
+    /* background-image: url("https://images.unsplash.com/photo-1563283805-d8bf898cd83d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8fHx8fHx8MTY5OTkzNTk0MA&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080"); */
+    /* background-color: rgb(5, 5, 75); */
+    background-image: url("/workspace/newtab/Wallpapers_2560x1600-039.jpg");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-position: center;
+    background-size: cover;
+    color: white;  
+}
+
+...
+
+https://source.unsplash.com/user/userId/likes 주소는 unsplash 라는 무료 이미지 사이트에서 제공하는 이미지 주소로, 사이트에 가입 후 원하는 이미지에 좋아요 표시를 누르면, 본인이 좋아요를 누른 사진을 랜덤으로 적용할 수 있다. 랜덤한 이미지를 원하면 해당 주소에 "user/본인아이디" 를 입력 후 사용하면 되고, 별도의 이미지 url을 넣어도 된다.
+background-repeat 속성을 no-repeat으로, background-attachment는 fixed로, background-position은 center로, 그리고 background-size는 cover로 설정한다. 마지막으로 color를 white로 변경해 글자 색상을 흰색으로 바꿔주면 원하는 배경이 적용된 웸 페이지를 완성할 수 있다.
+
+이제 해당 페이지를 크롬 익스텐션으로 적용해주기 위해 index.html 파일 아래에 manifest.json 이라는 파일을 생성한다.
+
+- manifest.json
+{
+    "name": "newtab"
+  , "description": "Made by Jinsung"
+  , "version": "1.0"
+  , "manifest_version": 3
+  , "permissions": ["storage"]
+  , "chrome_url_overrides": {
+        "newtab": "index.html"
+    }
+  , "host_permissions": ["<all_urls>"]
+}
+
+이 설정은, 개발한 웹페이지를 크롬 익스텐션으로 사용할 수 있게 하는 설정이고, name과 description은 원하는 것으로 변경해도 된다.
+
+그 다음 크롬에 chrome://extensions/ 을 검색해서 이동하여, 화면에 보이는 "압축해제된 확장 프로그램을 로드합니다" 버튼을 눌러 개발한 폴더를 선택해주면, 웹 페이지가 추가 되고, 크롬 탭을 새로 추가해보면 개발한 웹페이지가 나오는 것을 볼 수 있다.
+적용된 크롬 시작 화면에서 북마크 추가 버튼을 눌러, 이름에는 인프런을, 주소에는 https://www.inflearn.com/ 를 입력해 북마크로 추가해본다. 그 다음 추가된 북마크를 눌러보면, 작성한 주소로 이동하고, 창을 종료했다가 다시 실행해도 동일하게 추가된 아이템이 그대로 저장되어 있는 것을 볼 수 있다.
+
+
+참고강의 : https://www.inflearn.com/course/%ED%94%84%EB%A1%A0%ED%8A%B8%EC%97%94%EB%93%9C-%EC%9E%90%EB%B0%94%EC%8A%A4%ED%81%AC%EB%A6%BD%ED%8A%B8-%EC%B2%AB%EA%B1%B8%EC%9D%8C
