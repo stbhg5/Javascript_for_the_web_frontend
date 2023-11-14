@@ -52,6 +52,7 @@
     <a href="https://stbhg5.tistory.com/290">API를 사용해 명언 설정하기</a><br/>
     <a href="https://stbhg5.tistory.com/291">북마크바 만들기</a><br/>
     <a href="https://stbhg5.tistory.com/292">북마크 아이템 추가하기</a><br/>
+    <a href="https://stbhg5.tistory.com/293">프로젝트 적용하기</a><br/>
     <br/>
 
 <p>섹션7 [부록] 꼭 알아야하는 css<p/>
